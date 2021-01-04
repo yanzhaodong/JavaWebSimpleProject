@@ -23,5 +23,6 @@ public interface IUserDAO {
 	//减少用户输错密码机会
 	int userUpdateChance(String username, String chance);
 	
-
+	//得到所有被禁用用户
+	List<User> getForbiddenUsers();
 }

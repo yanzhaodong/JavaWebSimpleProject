@@ -31,7 +31,7 @@
 				<td><%=rs.getString("id") %></td>
 				<td><%=username %></td>
 				<td><%=rs.getString("email") %></td>
-                <td><a href="RecoverServlet?id=<%=String.valueOf(id)%>" class="tablelink">恢复</a></td>
+                <td><a href="UserServlet?id=<%=String.valueOf(id)%>&action=recover" class="tablelink">恢复</a></td>
 			</tr>
 		<%
 			}

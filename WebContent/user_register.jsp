@@ -51,7 +51,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
    <body >
   	<div style="position: absolute;top:0;bottom: 0;left: 0;right: 0;height: 300px;width: 500px;margin:auto;">
-  	<form action="UserRegisterServlet" method="post">
+  	<form action="UserServlet?action=register" method="post">
   		<center><h1 style="color:red">用户注册</h1>
   		<table style="text-align:justify;text-align-last: justify;">
  			<tr>

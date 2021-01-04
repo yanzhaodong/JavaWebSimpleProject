@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import dao.IUserDAO;
 import entity.User;
@@ -184,5 +186,33 @@ public class UserDAOImpl implements IUserDAO{
 			JDBCUtil.close(null, preparedStatement, connection);
 		}
 		return executeCount;
+	}
+	
+	//得到所有被禁用用户
+	public List<User> getForbiddenUsers() {
+		List<User> users = new ArrayList<User>();
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		
+		try {
+			connection = JDBCUtil.getConnection();
+			preparedStatement = connection.prepareStatement("select id,username,email from users where chance=?");
+			preparedStatement.setObject(1, 0);
+			resultSet = preparedStatement.executeQuery();
+			
+			while (resultSet.next()) {
+				users.add(new User(resultSet.getInt("id"),resultSet.getString("username"),resultSet.getString("email")));
+			}
+		} catch (ClassNotFoundException  e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(resultSet, preparedStatement, connection);
+		}
+		return users;
 	}
 }

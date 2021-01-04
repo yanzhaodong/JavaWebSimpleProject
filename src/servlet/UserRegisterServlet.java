@@ -37,22 +37,22 @@ public class UserRegisterServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String result = null;
-		String username = req.getParameter("username");
-		String password = req.getParameter("password");
-		String againpassword = req.getParameter("againpassword");
-		String email = req.getParameter("email");
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String againpassword = request.getParameter("againpassword");
+		String email = request.getParameter("email");
 		try {
 			IUserBIZ userBIZ = new UserBIZImpl();
-			result = userBIZ.userRegister(username, password, againpassword,email, req);
+			result = userBIZ.userRegister(username, password, againpassword,email, request);
 			if (result.equals(UserRegisterEnum.USER_REGISTER_SUCCESS.getValue())) {
-				req.getRequestDispatcher("user_login.jsp?msg=" + result + "").forward(
-						req, resp);
+				request.getRequestDispatcher("user_login.jsp?msg=" + result + "").forward(
+						request, response);
 			} else {
-				req.getRequestDispatcher("user_register.jsp?msg=" + result + "")
-						.forward(req, resp);
+				request.getRequestDispatcher("user_register.jsp?msg=" + result + "")
+						.forward(request, response);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -7,7 +7,17 @@ public class User {
 	private String email;
 	private String chance;
 	
-	
+	public User() {
+		
+	}
+
+	public User(int userid, String username, String email) {
+		super();
+		this.userid = userid;
+		this.username = username;
+		this.email = email;
+	}
+
 
 	public int getUserid() {
 		return userid;

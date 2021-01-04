@@ -1,6 +1,10 @@
 package biz;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
+import entity.User;
 
 public interface IUserBIZ {
 	//用户登录
@@ -16,4 +20,7 @@ public interface IUserBIZ {
 	
 	//用户恢复
 	void userRecover(String id, HttpServletRequest req);
+	
+	//得到所有用户
+	List<User> getForbiddenUsers(HttpServletRequest req);
 }

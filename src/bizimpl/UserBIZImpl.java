@@ -1,5 +1,7 @@
 package bizimpl;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import biz.IUserBIZ;
@@ -101,5 +103,8 @@ public class UserBIZImpl implements IUserBIZ {
 		userDAO.userRecover(id);
 	}
 	
-
+	//得到所有用户
+	public List<User> getForbiddenUsers(HttpServletRequest req){
+		return userDAO.getForbiddenUsers();
+	}
 }

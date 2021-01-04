@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="utf-8">
     <title></title>
     
 	<meta http-equiv="pragma" content="no-cache">
@@ -57,7 +57,7 @@
 <body>
 	
   	<div style="position: absolute;top:0;bottom: 0;left: 0;right: 0;height: 300px;width: 500px;margin:auto;">
-  	<form action="UserLoginServlet" method="post">
+  	<form action="UserLoginServlet?action=login" method="post">
   		<h1 style="color:red">登录系统</h1>
   		<table style="text-align:justify;text-align-last: justify;">
   			<tr>
