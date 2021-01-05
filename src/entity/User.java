@@ -18,7 +18,6 @@ public class User {
 		this.email = email;
 	}
 
-
 	public int getUserid() {
 		return userid;
 	}
