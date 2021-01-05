@@ -11,6 +11,7 @@ import entity.User;
 import enums.UserLoginEnum;
 import enums.UserRegisterEnum;
 import utils.StringUtil;
+import utils.ValUtil;
 
 public class UserBIZImpl implements IUserBIZ {
 	IUserDAO userDAO = new UserDAOImpl();
@@ -74,7 +75,7 @@ public class UserBIZImpl implements IUserBIZ {
 		if (StringUtil.isEmpty(password)) {
 			return UserRegisterEnum.USER_REGISTER_PASSWORD_IS_NULL.getDesc();
 		}
-		if (password.length() < 6 | password.length() > 20) {
+		if (!ValUtil.checkPassword(password)) {
 			return UserRegisterEnum.USER_PASSWORD_LENGTH_INVALID.getDesc();
 		}
 		if (StringUtil.isEmpty(email)) {
