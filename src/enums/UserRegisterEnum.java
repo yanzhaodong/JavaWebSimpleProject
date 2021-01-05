@@ -6,7 +6,7 @@ public enum UserRegisterEnum {
 	USER_REGISTER_EMAIL_IS_NULL("user_register_email_is_null","注册邮箱不能为空"),
 	USER_REGISTER_PASSWORDS_DISMATCH("user_register_passwords_dismatch","密码不一致"),
 	USER_ALREADY_EXIST("user_already_exist","用户已存在"),
-	USER_REGISTER_SUCCESS("user_register_success","登录成功");
+	USER_REGISTER_SUCCESS("user_register_success","注册成功");
 	
 	private String value;
 	private String desc;

@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@ page import="utils.ValidateUtil" %>
 <%@ page import="enums.UserRegisterEnum" %>
 <%
 String path = request.getContextPath();

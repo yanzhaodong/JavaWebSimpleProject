@@ -15,7 +15,7 @@ public interface IUserDAO {
 	User userToRegister(String username);
 	
 	//解除用户禁用状态
-	int userRecover(String id);
+	int userRecover(String username);
 
 	//查询用户剩余机会
 	String userGetChance(String username);
@@ -25,4 +25,7 @@ public interface IUserDAO {
 	
 	//得到所有被禁用用户
 	List<User> getForbiddenUsers();
+	
+	//管理员注册
+	int adminInit();
 }

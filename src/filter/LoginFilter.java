@@ -6,9 +6,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import biz.IAdminBIZ;
 import biz.IUserBIZ;
-import bizimpl.AdminBIZImpl;
 import bizimpl.UserBIZImpl;
 import enums.UserLoginEnum;
 
@@ -34,19 +32,18 @@ public class LoginFilter implements Filter {
         int idx = url.lastIndexOf("/");
         String endWith = url.substring(idx + 1);
         
-        if (endWith.equals("user_login.jsp")) {
+        if ("user_login.jsp".equals(endWith)) {
             //新建管理员用户(如果已存在会跳过)
-    		IAdminBIZ adminBIZ = new AdminBIZImpl();
-    		adminBIZ.adminInit(request);
+    		IUserBIZ userBIZ = new UserBIZImpl();
+    		userBIZ.adminInit(request);
     		
             System.out.println("是登录页面，不进行拦截处理");
             chain.doFilter(req, resp);       	
-        } else if (endWith.equals("user_register.jsp")) {
+        } else if ("user_register.jsp".equals(endWith)) {
         	System.out.println("是注册页面，不进行拦截处理");
         	chain.doFilter(req, resp); 
         } else {
             /*不是登录页面  进行拦截处理*/
-
             System.out.println("不是登录页面，进行拦截处理");
 
             if (!isLogin(request)) {
@@ -70,9 +67,9 @@ public class LoginFilter implements Filter {
         // 得到当前cookies的账户密码信息
         if (cookies != null && cookies.length > 0) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("username")) {
+                if ("username".equals(cookie.getName())) {
                     username = cookie.getValue();
-                } else if (cookie.getName().equals("password")) {
+                } else if ("password".equals(cookie.getName())) {
                     password = cookie.getValue();
                 }
             }
@@ -86,7 +83,7 @@ public class LoginFilter implements Filter {
 			e.printStackTrace();
 		}
 
-		if (result.equals(UserLoginEnum.USER_LOGIN_SUCCESS.getValue())){
+		if (UserLoginEnum.USER_LOGIN_SUCCESS.getValue().equals(result)){
 			return true;
 		}
         return false;

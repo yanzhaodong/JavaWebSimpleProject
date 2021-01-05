@@ -18,13 +18,13 @@
 		<%
 			List<User> users = (List<User>) request.getAttribute("users"); 
 			for (User user:users){
-				int id = user.getUserid();
+				String username = user.getUsername();
 		%>
 			<tr>
-				<td><%=id %></td>
-				<td><%=user.getUsername() %></td>
+				<td><%=user.getUserid() %></td>
+				<td><%=username %></td>
 				<td><%=user.getEmail() %></td>
-                <td><a href="UserServlet?id=<%=String.valueOf(id)%>&action=recover" class="tablelink">恢复</a></td>
+                <td><a href="UserServlet?username=<%=username%>&action=recover" class="tablelink">恢复</a></td>
 			</tr>
 		<%
 			}

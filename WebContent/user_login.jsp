@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@ page import="utils.ValidateUtil" %>
-<%@ page import="dao.IAdminDAO" %>
-<%@ page import="daoimpl.AdminDAOImpl" %>
 <%@ page import="enums.UserLoginEnum" %>
 <%@ page import="java.awt.image.BufferedImage" %>
 <!DOCTYPE html>

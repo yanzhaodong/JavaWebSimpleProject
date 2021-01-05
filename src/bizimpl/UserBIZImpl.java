@@ -21,7 +21,7 @@ public class UserBIZImpl implements IUserBIZ {
 		String chance = userDAO.userGetChance(username);
 
 		if (StringUtil.isEmpty(username)) {
-			return "用户名不能为空";
+			return UserLoginEnum.USER_NAME_IS_NUll.getDesc();
 		}
 		if (StringUtil.isEmpty(password)) {
 			return UserLoginEnum.USER_PASSWORD_IS_NULL.getDesc();
@@ -33,7 +33,7 @@ public class UserBIZImpl implements IUserBIZ {
 			return UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getDesc();
 		}
 		
-		if ("0".equals(chance)) {
+		if ("0".equals(chance) & !"admin".equals(username)) {
 			return UserLoginEnum.USER_FORBIDDEN.getDesc();
 		}
 
@@ -43,10 +43,11 @@ public class UserBIZImpl implements IUserBIZ {
 			userDAO.userUpdateChance(username,chance);
 			return UserLoginEnum.USER_NAME_OR_PASSWORD_IS_FAIL.getDesc();
 		}
-		// 登录成功后 把当前登录成功后的用户 存入到SESSION中 基本是 所有后台的必备功能
+		// 登录成功后 把当前登录成功后的用户 存入到SESSION中 
 		request.getSession().setAttribute("user", user);
+		userDAO.userRecover(username);
 		
-		return "登陆成功";
+		return UserLoginEnum.USER_LOGIN_SUCCESS.getDesc();
 	}
 
 	//用户检测
@@ -67,7 +68,7 @@ public class UserBIZImpl implements IUserBIZ {
 			String email, HttpServletRequest req) {
 		
 		if (StringUtil.isEmpty(username)) {
-			return "用户名不能为空";
+			return UserRegisterEnum.USER_REGISTER_NAME_IS_NULL.getDesc();
 		}
 		if (StringUtil.isEmpty(password)) {
 			return UserRegisterEnum.USER_REGISTER_PASSWORD_IS_NULL.getDesc();
@@ -95,12 +96,17 @@ public class UserBIZImpl implements IUserBIZ {
 
 
 	//用户恢复注册
-	public void userRecover(String id, HttpServletRequest req) {
-		userDAO.userRecover(id);
+	public void userRecover(String username, HttpServletRequest req) {
+		userDAO.userRecover(username);
 	}
 	
 	//得到所有用户
 	public List<User> getForbiddenUsers(HttpServletRequest req){
 		return userDAO.getForbiddenUsers();
+	}
+	
+	//初始化管理员
+	public void adminInit(HttpServletRequest req) {
+		userDAO.adminInit();
 	}
 }

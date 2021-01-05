@@ -105,15 +105,15 @@ public class UserDAOImpl implements IUserDAO{
 	}
 	
 	//解除用户禁用状态
-	public int userRecover(String id){
+	public int userRecover(String username){
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		int executeCount = 0;
 		
 		try {
 			connection = JDBCUtil.getConnection();
-			preparedStatement = connection.prepareStatement("UPDATE users SET chance = '3' WHERE id=?");
-			preparedStatement.setObject(1, id);
+			preparedStatement = connection.prepareStatement("UPDATE users SET chance = '3' WHERE username=?");
+			preparedStatement.setObject(1, username);
 			executeCount = preparedStatement.executeUpdate();
 			
 		} catch (ClassNotFoundException  e) {
@@ -214,5 +214,46 @@ public class UserDAOImpl implements IUserDAO{
 			JDBCUtil.close(resultSet, preparedStatement, connection);
 		}
 		return users;
+	}
+	
+	//管理员注册
+	public int adminInit() {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		
+		int executeCount = 0;
+		String chance = "3";
+		String username="admin";
+		String password="123";
+		String email="email";
+		
+		try {
+			connection = JDBCUtil.getConnection();
+			preparedStatement = connection.prepareStatement("select username from users where username=?");
+			preparedStatement.setObject(1, username);
+			resultSet = preparedStatement.executeQuery();
+			
+			if (! resultSet.next()) {
+				try {
+					connection = JDBCUtil.getConnection();
+					preparedStatement = connection.prepareStatement("insert into users (username,password,"
+							+ "email,chance) values(?,?,?,?)");
+					preparedStatement.setObject(1, username);
+					preparedStatement.setObject(2, password);
+					preparedStatement.setObject(3, email);
+					preparedStatement.setObject(4, chance);
+					executeCount = preparedStatement.executeUpdate();
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}finally {
+					JDBCUtil.close(null, preparedStatement, connection);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return executeCount;
 	}
 }
