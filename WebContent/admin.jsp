@@ -17,16 +17,18 @@
 		<tr><td>ID</td><td>用户</td><td>邮箱</td><td>操作</td>
 		<%
 			List<User> users = (List<User>) request.getAttribute("users"); 
-			for (User user:users){
-				String username = user.getUsername();
-		%>
-			<tr>
-				<td><%=user.getUserid() %></td>
-				<td><%=username %></td>
-				<td><%=user.getEmail() %></td>
-                <td><a href="UserServlet?username=<%=username%>&action=recover" class="tablelink">恢复</a></td>
-			</tr>
-		<%
+			if (users!=null){
+				for (User user:users){
+					String username = user.getUsername();	
+				%>
+					<tr>
+						<td><%=user.getUserid() %></td>
+						<td><%=username %></td>
+						<td><%=user.getEmail() %></td>
+		                <td><a href="UserServlet?username=<%=username%>&action=recover" class="tablelink">恢复</a></td>
+					</tr>
+				<%
+				}
 			}
 		%>
 	</table>

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import biz.IUserBIZ;
 import bizimpl.UserBIZImpl;
 import enums.UserLoginEnum;
+import utils.StringUtil;
 
 import java.io.IOException;
 
@@ -59,34 +60,12 @@ public class LoginFilter implements Filter {
 
 
     private boolean isLogin(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        String username = "";
-        String password = "";
-        String result = null;
-        
-        // 得到当前cookies的账户密码信息
-        if (cookies != null && cookies.length > 0) {
-            for (Cookie cookie : cookies) {
-                if ("username".equals(cookie.getName())) {
-                    username = cookie.getValue();
-                } else if ("password".equals(cookie.getName())) {
-                    password = cookie.getValue();
-                }
-            }
-        }
+    	if ((request.getSession().getAttribute("user")==null)) {
+    		return false;
+    	}
+    	return true;
 
-        //看看用户是否存在于数据库中
-		try {
-			IUserBIZ userBIZ = new UserBIZImpl();
-			result = userBIZ.userCheck(username, password,request);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
-		if (UserLoginEnum.USER_LOGIN_SUCCESS.getValue().equals(result)){
-			return true;
-		}
-        return false;
     }
 
     public void init(FilterConfig config) throws ServletException {

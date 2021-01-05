@@ -45,6 +45,7 @@ public class UserBIZImpl implements IUserBIZ {
 		}
 		// 登录成功后 把当前登录成功后的用户 存入到SESSION中 
 		request.getSession().setAttribute("user", user);
+		request.getSession().setMaxInactiveInterval(300);
 		userDAO.userRecover(username);
 		
 		return UserLoginEnum.USER_LOGIN_SUCCESS.getDesc();
