@@ -20,33 +20,10 @@
 
 	
 	<script type="text/javascript">
-	
-		<%String msg = request.getParameter("msg") == null ? "" : request
-						.getParameter("msg");%>
-						
-		<%if (msg.equals(UserLoginEnum.USER_NAME_IS_NUll.getValue())) {%>
-		 alert("<%=UserLoginEnum.USER_NAME_IS_NUll.getDesc()%>");
-		<%}%>			
-				
-		<%if (msg.equals(UserLoginEnum.USER_PASSWORD_IS_NULL.getValue())) {%>
-		 alert("<%=UserLoginEnum.USER_PASSWORD_IS_NULL.getDesc()%>");
-		<%}%>
-			
-		<%if (msg.equals(UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getValue())) {%>
-		 alert("<%=UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getDesc()%>");
-		<%}%>
-						
-		<%if (msg.equals(UserLoginEnum.USER_NAME_OR_PASSWORD_IS_FAIL.getValue())) {%>
-		 alert("<%=UserLoginEnum.USER_NAME_OR_PASSWORD_IS_FAIL.getDesc()%>");
-		<%}%>
-		
-		<%if (msg.equals(UserLoginEnum.USER_FORBIDDEN.getValue())) {%>
-		 alert("<%=UserLoginEnum.USER_FORBIDDEN.getDesc()%>");
+		<%String msg = request.getParameter("msg");%>
+		<%if (msg!=null && !msg.equals("登陆成功")) {%>
+		 alert("<%=msg%>");
 		<%}%>	
-		
-		<%if (msg.equals(UserLoginEnum.USER_LOGIN_SUCCESS.getValue())) {%>
-		 alert("<%=UserLoginEnum.USER_LOGIN_SUCCESS.getDesc()%>");
-	<%}%>
 		
 	</script>
 	<%
@@ -57,7 +34,7 @@
 <body>
 	
   	<div style="position: absolute;top:0;bottom: 0;left: 0;right: 0;height: 300px;width: 500px;margin:auto;">
-  	<form action="UserLoginServlet?action=login" method="post">
+  	<form action="UserServlet?action=login" method="post">
   		<h1 style="color:red">登录系统</h1>
   		<table style="text-align:justify;text-align-last: justify;">
   			<tr>

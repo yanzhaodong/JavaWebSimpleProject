@@ -2,8 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*"%>
 <%@ page import="utils.*" %>
-
-
+<%@ page import="java.util.List" %>
+<%@ page import="entity.User" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,24 +13,17 @@
 
   <body>
 	<input type="button" value="登出" style="float: right;" onclick="location='user_login.jsp'">
-    <%
-    	Connection conn = JDBCUtil.getConnection();
-    		Statement st = conn.createStatement(); 
-    		String sql = "select * from users where chance = '0' ";
-    		ResultSet rs = st.executeQuery(sql);
-    %>
 	<table  border="1"  >
 		<tr><td>ID</td><td>用户</td><td>邮箱</td><td>操作</td>
 		<%
-			
-			while (rs.next()) {
-				String username = rs.getString("username");
-				int id = rs.getInt("id");
+			List<User> users = (List<User>) request.getAttribute("users"); 
+			for (User user:users){
+				int id = user.getUserid();
 		%>
 			<tr>
-				<td><%=rs.getString("id") %></td>
-				<td><%=username %></td>
-				<td><%=rs.getString("email") %></td>
+				<td><%=id %></td>
+				<td><%=user.getUsername() %></td>
+				<td><%=user.getEmail() %></td>
                 <td><a href="UserServlet?id=<%=String.valueOf(id)%>&action=recover" class="tablelink">恢复</a></td>
 			</tr>
 		<%

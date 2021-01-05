@@ -22,20 +22,20 @@ public class UserBIZImpl implements IUserBIZ {
 		if (chance==null) {
 			chance = "0";}
 		if (StringUtil.isEmpty(username)) {
-			return UserLoginEnum.USER_NAME_IS_NUll.getValue();
+			return "用户名不能为空";
 		}
 		if (StringUtil.isEmpty(password)) {
-			return UserLoginEnum.USER_PASSWORD_IS_NULL.getValue();
+			return UserLoginEnum.USER_PASSWORD_IS_NULL.getDesc();
 		}
 		if (StringUtil.isEmpty(validatecode) || StringUtil.isEmpty(syscode)) {
-			return UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getValue();
+			return UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getDesc();
 		}
 		if (!validatecode.equals(syscode)) {
-			return UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getValue();
+			return UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getDesc();
 		}
 		
 		if (chance.equals("0")) {
-			return UserLoginEnum.USER_FORBIDDEN.getValue();
+			return UserLoginEnum.USER_FORBIDDEN.getDesc();
 		}
 		
 		User user = null;
@@ -43,26 +43,26 @@ public class UserBIZImpl implements IUserBIZ {
 		
 		if (user == null) {
 			userDAO.userUpdateChance(username,chance);
-			return UserLoginEnum.USER_NAME_OR_PASSWORD_IS_FAIL.getValue();
+			return UserLoginEnum.USER_NAME_OR_PASSWORD_IS_FAIL.getDesc();
 		}
 		// 登录成功后 把当前登录成功后的用户 存入到SESSION中 基本是 所有后台的必备功能
 		request.getSession().setAttribute("user", user);
 		
-		return UserLoginEnum.USER_LOGIN_SUCCESS.getValue();
+		return "登陆成功";
 	}
 
 	//用户检测
 	public String userCheck(String username, String password, HttpServletRequest request) {
 		if (StringUtil.isEmpty(username)) {
-			return UserLoginEnum.USER_NAME_IS_NUll.getValue();
+			return UserLoginEnum.USER_NAME_IS_NUll.getDesc();
 		}
 		if (StringUtil.isEmpty(password)) {
-			return UserLoginEnum.USER_PASSWORD_IS_NULL.getValue();
+			return UserLoginEnum.USER_PASSWORD_IS_NULL.getDesc();
 		}
 		
 
 		userDAO.userLogin(username,password);
-		return UserLoginEnum.USER_LOGIN_SUCCESS.getValue();
+		return UserLoginEnum.USER_LOGIN_SUCCESS.getDesc();
 		
 	}
 	
@@ -71,28 +71,28 @@ public class UserBIZImpl implements IUserBIZ {
 			String email, HttpServletRequest req) {
 		
 		if (StringUtil.isEmpty(username)) {
-			return UserRegisterEnum.USER_REGISTER_NAME_IS_NULL.getValue();
+			return "用户名不能为空";
 		}
 		if (StringUtil.isEmpty(password)) {
-			return UserRegisterEnum.USER_REGISTER_PASSWORD_IS_NULL.getValue();
+			return UserRegisterEnum.USER_REGISTER_PASSWORD_IS_NULL.getDesc();
 		}
 		if (StringUtil.isEmpty(email)) {
-			return UserRegisterEnum.USER_REGISTER_EMAIL_IS_NULL.getValue();
+			return UserRegisterEnum.USER_REGISTER_EMAIL_IS_NULL.getDesc();
 		}
 		if(!password.equals(againpassword)){
-			return UserRegisterEnum.USER_REGISTER_PASSWORDS_DISMATCH.getValue();
+			return UserRegisterEnum.USER_REGISTER_PASSWORDS_DISMATCH.getDesc();
 		}
 		
 		User user = null;
 		user = userDAO.userToRegister(username);
 		if (user != null) {
-			return UserRegisterEnum.USER_ALREADY_EXIST.getValue();
+			return UserRegisterEnum.USER_ALREADY_EXIST.getDesc();
 		}
 		
 		Integer executeCount =  null;
 		executeCount = userDAO.userRegister(username, password,email);
 		if(executeCount > 0){
-			return UserRegisterEnum.USER_REGISTER_SUCCESS.getValue();
+			return UserRegisterEnum.USER_REGISTER_SUCCESS.getDesc();
 		}
 		return null;
 	}

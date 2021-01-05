@@ -22,28 +22,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	<script type="text/javascript">
 
-	<%String msg = request.getParameter("msg") == null ? "" : request
-					.getParameter("msg");%>
-					
-	<%if (msg.equals(UserRegisterEnum.USER_ALREADY_EXIST.getValue())) {%>
-	 alert("<%=UserRegisterEnum.USER_ALREADY_EXIST.getDesc()%>");
-	<%}%>			
-	
-	<%if (msg.equals(UserRegisterEnum.USER_REGISTER_NAME_IS_NULL.getValue())) {%>
-	 alert("<%=UserRegisterEnum.USER_REGISTER_NAME_IS_NULL.getDesc()%>");
+	<%String msg = request.getParameter("msg");%>
+	<%if (msg!=null && !msg.equals("登陆成功")) {%>
+	 alert("<%=msg%>");
 	<%}%>
-					
-	<%if (msg.equals(UserRegisterEnum.USER_REGISTER_PASSWORD_IS_NULL.getValue())) {%>
-	 alert("<%=UserRegisterEnum.USER_REGISTER_PASSWORD_IS_NULL.getDesc()%>");
-	<%}%>
-	
-	<%if (msg.equals(UserRegisterEnum.USER_REGISTER_PASSWORDS_DISMATCH.getValue())) {%>
-	 alert("<%=UserRegisterEnum.USER_REGISTER_PASSWORDS_DISMATCH.getDesc()%>");
-	<%}%>
-
-	<%if (msg.equals(UserRegisterEnum.USER_REGISTER_SUCCESS.getValue())) {%>
-	 alert("<%=UserRegisterEnum.USER_REGISTER_SUCCESS.getDesc()%>");
-<%}%>
 	
 </script>
 
