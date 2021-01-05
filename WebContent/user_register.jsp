@@ -21,13 +21,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="description" content="This is my page">
 
 	<script type="text/javascript">
-
 	<%String msg = request.getParameter("msg");%>
-	<%if (msg!=null && !msg.equals("登陆成功")) {%>
+	<%if (msg!=null && !"登陆成功".equals(msg)) {%>
 	 alert("<%=msg%>");
 	<%}%>
-	
-</script>
+	</script>
 
   </head>
   
@@ -51,10 +49,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			<tr>
   				<td>确认密码：</td>
   				<td><input type="password" name="againpassword"></td>
-  			</tr>
-  			
+  			</tr>		
   			<tr>
-  					
 	  			<td><button type="submit">注册</button></td>
 	  			<td><input type="button" value="返回" onclick="location='user_login.jsp'"/></td>
   			</tr>

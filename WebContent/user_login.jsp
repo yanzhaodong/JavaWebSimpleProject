@@ -10,26 +10,19 @@
 <head>
 <meta charset="utf-8">
     <title></title>
-    
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	
-
-	
 	<script type="text/javascript">
 		<%String msg = request.getParameter("msg");%>
-		<%if (msg!=null && !msg.equals("登陆成功")) {%>
+		<%if (msg!=null && !"登陆成功".equals(msg)) {%>
 		 alert("<%=msg%>");
 		<%}%>	
 		
 	</script>
-	<%
-		IAdminDAO adminDAO = new AdminDAOImpl();
-		adminDAO.adminInit();
-	%>
 </head>
 <body>
 	

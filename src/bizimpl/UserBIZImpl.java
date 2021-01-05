@@ -19,8 +19,7 @@ public class UserBIZImpl implements IUserBIZ {
 	public String userLogin(String username, String password,
 			String validatecode, String syscode, HttpServletRequest request) {
 		String chance = userDAO.userGetChance(username);
-		if (chance==null) {
-			chance = "0";}
+
 		if (StringUtil.isEmpty(username)) {
 			return "用户名不能为空";
 		}
@@ -34,12 +33,11 @@ public class UserBIZImpl implements IUserBIZ {
 			return UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getDesc();
 		}
 		
-		if (chance.equals("0")) {
+		if ("0".equals(chance)) {
 			return UserLoginEnum.USER_FORBIDDEN.getDesc();
 		}
-		
-		User user = null;
-		user = userDAO.userLogin(username,password);
+
+		User user = userDAO.userLogin(username,password);
 		
 		if (user == null) {
 			userDAO.userUpdateChance(username,chance);
@@ -59,8 +57,6 @@ public class UserBIZImpl implements IUserBIZ {
 		if (StringUtil.isEmpty(password)) {
 			return UserLoginEnum.USER_PASSWORD_IS_NULL.getDesc();
 		}
-		
-
 		userDAO.userLogin(username,password);
 		return UserLoginEnum.USER_LOGIN_SUCCESS.getDesc();
 		
