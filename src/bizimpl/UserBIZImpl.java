@@ -74,6 +74,9 @@ public class UserBIZImpl implements IUserBIZ {
 		if (StringUtil.isEmpty(password)) {
 			return UserRegisterEnum.USER_REGISTER_PASSWORD_IS_NULL.getDesc();
 		}
+		if (password.length() < 6 | password.length() > 20) {
+			return UserRegisterEnum.USER_PASSWORD_LENGTH_INVALID.getDesc();
+		}
 		if (StringUtil.isEmpty(email)) {
 			return UserRegisterEnum.USER_REGISTER_EMAIL_IS_NULL.getDesc();
 		}

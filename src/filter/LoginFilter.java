@@ -2,15 +2,11 @@ package filter;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import biz.IUserBIZ;
 import bizimpl.UserBIZImpl;
-import enums.UserLoginEnum;
-import utils.StringUtil;
-
 import java.io.IOException;
 
 @WebFilter(filterName = "LoginFilter", urlPatterns = "*.jsp", dispatcherTypes = {})

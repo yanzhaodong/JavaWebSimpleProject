@@ -16,7 +16,7 @@
 	<table  border="1"  >
 		<tr><td>ID</td><td>用户</td><td>邮箱</td><td>操作</td>
 		<%
-			List<User> users = (List<User>) request.getAttribute("users"); 
+			List<User> users = Cast.cast(request.getAttribute("users")); 
 			if (users!=null){
 				for (User user:users){
 					String username = user.getUsername();	
