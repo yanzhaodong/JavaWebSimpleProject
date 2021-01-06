@@ -23,7 +23,6 @@
 	</script>
 </head>
 <body>
-	
   	<div style="position: absolute;top:0;bottom: 0;left: 0;right: 0;height: 300px;width: 500px;margin:auto;">
   	<form action="UserServlet?action=login" method="post">
   		<h1 style="color:red">登录系统</h1>
@@ -41,7 +40,6 @@
   				<td><input name="validatecode"></td>
   				<td><img alt="验证码看不清，换一张" src="${pageContext.request.contextPath}/DrawImageServlet" id="validateCodeImg" ></td>
   			</tr>
-  			
   			<tr>	
 	  			<td><button type="submit">登录</button></td>
 	  			<td><input type="button" value="注册" onclick="location='user_register.jsp'"/></td>
