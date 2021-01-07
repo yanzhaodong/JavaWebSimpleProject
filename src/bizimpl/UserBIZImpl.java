@@ -12,11 +12,14 @@ import enums.UserLoginEnum;
 import enums.UserRegisterEnum;
 import utils.StringUtil;
 import utils.ValUtil;
+import utils.Cast;
 
 public class UserBIZImpl implements IUserBIZ {
 	IUserDAO userDAO = new UserDAOImpl();
 	
-	//用户登录
+	/*
+	 * 用户登录
+	 */
 	public String userLogin(HttpServletRequest request) {
 		
 		String username = request.getParameter("username");
@@ -42,13 +45,13 @@ public class UserBIZImpl implements IUserBIZ {
 				desc =  UserLoginEnum.USER_NAME_OR_PASSWORD_IS_FAIL.getDesc();
 			}else {
 				// 登录成功后 把当前登录成功后的用户 存入到SESSION中 
-				request.getSession().setAttribute("user", user);
+				request.getSession().setAttribute("username", username);
 				request.getSession().setMaxInactiveInterval(300);
 				userDAO.userRecover(username);
 				if ("admin".equals(username)) {
 					IUserBIZ userBIZ = new UserBIZImpl();
-					List<User> users = userBIZ.getForbiddenUsers(request);
-					request.setAttribute("users", users);
+					List<User> forbidden_users = userBIZ.getForbiddenUsers(request);
+					request.getSession().setAttribute("forbidden_users", forbidden_users);
 					return "admin.jsp?msg="+UserLoginEnum.USER_LOGIN_SUCCESS.getDesc();
 				}else {
 					return "index.jsp?msg="+UserLoginEnum.USER_LOGIN_SUCCESS.getDesc();
@@ -57,21 +60,10 @@ public class UserBIZImpl implements IUserBIZ {
 		}
 		return "user_login.jsp?msg=" + desc;
 	}
-
-	//用户检测
-	public String userCheck(String username, String password, HttpServletRequest request) {
-		if (StringUtil.isEmpty(username)) {
-			return UserLoginEnum.USER_NAME_IS_NUll.getDesc();
-		}
-		if (StringUtil.isEmpty(password)) {
-			return UserLoginEnum.USER_PASSWORD_IS_NULL.getDesc();
-		}
-		userDAO.userLogin(username,password);
-		return UserLoginEnum.USER_LOGIN_SUCCESS.getDesc();
-		
-	}
 	
-	//用户注册
+	/*
+	 * 用户注册
+	 */
 	public String userRegister(HttpServletRequest request) {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
@@ -103,17 +95,33 @@ public class UserBIZImpl implements IUserBIZ {
 		return "user_register.jsp?msg=" + desc;
 	}
 
-	//用户恢复注册
-	public void userRecover(String username, HttpServletRequest req) {
+	/*
+	 * 用户恢复注册
+	 */
+	public String userRecover(HttpServletRequest request) {
+		String username = request.getParameter("username");
 		userDAO.userRecover(username);
+		List<User> users = Cast.cast(request.getSession().getAttribute("forbidden_users"));
+		for (User user:users) {
+			if (username != null & username.equals(user.getUsername())){
+				users.remove(user);
+				request.getSession().setAttribute("forbidden_users", users);
+				break;
+			}
+		}
+		return "admin.jsp";
 	}
 	
-	//得到所有用户
+	/*
+	 * 得到所有用户
+	 */
 	public List<User> getForbiddenUsers(HttpServletRequest req){
 		return userDAO.getForbiddenUsers();
 	}
 	
-	//初始化管理员
+	/*
+	 * 初始化管理员
+	 */
 	public void adminInit(HttpServletRequest req) {
 		userDAO.adminInit();
 	}

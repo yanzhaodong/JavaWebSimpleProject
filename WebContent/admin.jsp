@@ -12,11 +12,11 @@
 </head>
 
   <body>
-	<input type="button" value="登出" style="float: right;" onclick="location='user_login.jsp'">
+	<input type="button" value="登出" style="float:right;" onclick="location='user_login.jsp?logout=1'">
 	<table  border="1"  >
 		<tr><td>ID</td><td>用户</td><td>邮箱</td><td>操作</td>
 		<%
-			List<User> users = Cast.cast(request.getAttribute("users")); 
+			List<User> users = Cast.cast(request.getSession().getAttribute("forbidden_users")); 
 			if (users!=null){
 				for (User user:users){
 					String username = user.getUsername();	
@@ -25,7 +25,7 @@
 						<td><%=user.getUserid() %></td>
 						<td><%=username %></td>
 						<td><%=user.getEmail() %></td>
-		                <td><a href="UserServlet?username=<%=username%>&action=recover" class="tablelink">恢复</a></td>
+						<td><input type="button" value="恢复" onclick="if(confirm('此举动将恢复用户，确认吗？')==false)return false;location.href='UserServlet?username=<%=username%>&action=recover'"/></td>
 					</tr>
 				<%
 				}

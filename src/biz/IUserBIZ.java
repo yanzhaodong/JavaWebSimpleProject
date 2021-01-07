@@ -13,11 +13,8 @@ public interface IUserBIZ {
 	//用户注册
 	String userRegister(HttpServletRequest req);
 	
-	//用户检测
-	String userCheck(String username, String password, HttpServletRequest request);
-	
 	//用户恢复
-	void userRecover(String username, HttpServletRequest req);
+	String userRecover(HttpServletRequest req);
 	
 	//得到所有用户
 	List<User> getForbiddenUsers(HttpServletRequest req);

@@ -13,7 +13,10 @@
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	<% 
-	session.invalidate();
+	//检测是否有用户要登出
+	String isOut = request.getParameter("logout");
+	if ("1".equals(isOut)){
+		session.invalidate();}
 	%>
 	<script type="text/javascript">
 		<%String msg = request.getParameter("msg");%>

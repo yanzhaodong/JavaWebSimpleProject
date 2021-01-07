@@ -12,7 +12,9 @@ import entity.User;
 import utils.JDBCUtil;
 
 public class UserDAOImpl implements IUserDAO{
-	//用户登录，查询用户是否存在
+	/*
+	 * 用户登录，查询用户是否存在
+	 */
 	public User userLogin(String username, String password) {
 		User user = null;
 		Connection connection = null;
@@ -32,20 +34,19 @@ public class UserDAOImpl implements IUserDAO{
 				user.setUsername(resultSet.getString("username"));
 				user.setPassword(resultSet.getString("password"));
 			}
-		} catch (ClassNotFoundException  e) {
+
+		}catch (Exception e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
+		}finally {
 			JDBCUtil.close(resultSet, preparedStatement, connection);
 		}
 		return user;
 	}
 	
 	
-	//用户注册过程，判断用户名存在否
+	/*
+	 * 用户注册过程，判断用户名存在否
+	 */
 	public User userToRegister(String username) {
 		User user = null;
 		Connection connection = null;
@@ -62,10 +63,7 @@ public class UserDAOImpl implements IUserDAO{
 				user = new User();
 				user.setUsername(resultSet.getString("USERNAME"));
 			}
-		} catch (ClassNotFoundException  e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -75,7 +73,9 @@ public class UserDAOImpl implements IUserDAO{
 	}
 
 	
-	//用户注册过程，创建新用户
+	/*
+	 * 用户注册过程，创建新用户
+	 */
 	public int userRegister(String username, String password, String email) {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -91,20 +91,18 @@ public class UserDAOImpl implements IUserDAO{
 			preparedStatement.setObject(3, email);
 			preparedStatement.setObject(4, chance);
 			executeCount = preparedStatement.executeUpdate();
-			
-		} catch (ClassNotFoundException  e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			JDBCUtil.close(null, preparedStatement, connection);
 		}
 		return executeCount;
 	}
 	
-	//解除用户禁用状态
+	/*
+	 * 解除用户禁用状态
+	 */
 	public int userRecover(String username){
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -115,12 +113,7 @@ public class UserDAOImpl implements IUserDAO{
 			preparedStatement = connection.prepareStatement("UPDATE users SET chance = '3' WHERE username=?");
 			preparedStatement.setObject(1, username);
 			executeCount = preparedStatement.executeUpdate();
-			
-		} catch (ClassNotFoundException  e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
+		}catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			JDBCUtil.close(null, preparedStatement, connection);
@@ -128,7 +121,9 @@ public class UserDAOImpl implements IUserDAO{
 		return executeCount;
 	}
 
-	//查询用户剩余机会
+	/*
+	 * 查询用户剩余机会
+	 */
 	public String userGetChance(String username){
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -143,17 +138,15 @@ public class UserDAOImpl implements IUserDAO{
 			while (resultSet.next()) {
 				chance = resultSet.getString("chance");
 			}
-		} catch (ClassNotFoundException  e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
+		}catch (Exception e) {
 			e.printStackTrace();
 		}	
 		return chance;
 	}
 	
-	//减少用户输错密码机会
+	/*
+	 * 减少用户输错密码机会
+	 */
 	public int userUpdateChance(String username, String chance){
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -169,18 +162,15 @@ public class UserDAOImpl implements IUserDAO{
 				chance = resultSet.getString("chance");
 			}
 			preparedStatement.close();
-
-			String newChance = String.valueOf(Integer.valueOf(chance)-1);
+			String newChance = "3";
+			if (chance != null) {
+				newChance = String.valueOf(Integer.valueOf(chance)-1);}
 			preparedStatement = connection.prepareStatement("UPDATE users SET chance = ? WHERE username=?");
 			preparedStatement.setObject(1, newChance);
 			preparedStatement.setObject(2, username);
 			executeCount = preparedStatement.executeUpdate();
 			
-		} catch (ClassNotFoundException  e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
+		}catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			JDBCUtil.close(null, preparedStatement, connection);
@@ -188,7 +178,9 @@ public class UserDAOImpl implements IUserDAO{
 		return executeCount;
 	}
 	
-	//得到所有被禁用用户
+	/*
+	 * 得到所有被禁用用户
+	 */
 	public List<User> getForbiddenUsers() {
 		List<User> users = new ArrayList<User>();
 		Connection connection = null;
@@ -204,19 +196,17 @@ public class UserDAOImpl implements IUserDAO{
 			while (resultSet.next()) {
 				users.add(new User(resultSet.getInt("id"),resultSet.getString("username"),resultSet.getString("email")));
 			}
-		} catch (ClassNotFoundException  e) {
+		}catch (Exception e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
+		}finally {
 			JDBCUtil.close(resultSet, preparedStatement, connection);
 		}
 		return users;
 	}
 	
-	//管理员注册
+	/*
+	 * 管理员注册
+	 */
 	public int adminInit() {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -245,7 +235,7 @@ public class UserDAOImpl implements IUserDAO{
 					preparedStatement.setObject(4, chance);
 					executeCount = preparedStatement.executeUpdate();
 					
-				} catch (Exception e) {
+				}catch (Exception e) {
 					e.printStackTrace();
 				}finally {
 					JDBCUtil.close(null, preparedStatement, connection);
