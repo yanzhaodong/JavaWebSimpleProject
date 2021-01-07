@@ -44,21 +44,8 @@ public class UserServlet extends HttpServlet {
 			try {
 				IUserBIZ userBIZ = new UserBIZImpl();
 				result = userBIZ.userLogin(username, password, validatecode, syscode,request);
-				
-				//判断去管理员界面，去用户界面, 还是登陆失败返回登陆界面
-				if (UserLoginEnum.USER_LOGIN_SUCCESS.getDesc().equals(result)) {
-					if ("admin".equals(username)) {
-						request.getRequestDispatcher("UserServlet?action=list").forward(
-								request, response);					
-					}else{
-						request.getRequestDispatcher("index.jsp").forward(
-								request, response);					
-					}
-				} else {
-					request.setAttribute("info", result);
-					request.getRequestDispatcher("user_login.jsp?msg=" + result + "")
-							.forward(request, response);
-				}
+				request.getRequestDispatcher(result).forward(request, response);					
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}		

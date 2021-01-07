@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(filterName = "LoginFilter", urlPatterns = "*.jsp", dispatcherTypes = {})
+@WebFilter(filterName = "LoginFilter", urlPatterns = {"/index.jsp","/admin.jsp"}, dispatcherTypes = {})
 public class LoginFilter implements Filter {
     public void destroy() {
     }
@@ -19,17 +19,13 @@ public class LoginFilter implements Filter {
 
         int idx = url.lastIndexOf("/");
         String endWith = url.substring(idx + 1);
-        if ("user_login.jsp".equals(endWith)) {
-            chain.doFilter(req, resp);       	
-        } else if ("user_register.jsp".equals(endWith)) {
-        	chain.doFilter(req, resp); 
+        
+        if (!isLogin(request)) {
+            response.sendRedirect("user_login.jsp");
         } else {
-            if (!isLogin(request)) {
-                response.sendRedirect("user_login.jsp");
-            } else {
-                chain.doFilter(req, resp);
-            }       	
-        }
+            chain.doFilter(req, resp);
+        }       	
+
     }
 
     private boolean isLogin(HttpServletRequest request) {

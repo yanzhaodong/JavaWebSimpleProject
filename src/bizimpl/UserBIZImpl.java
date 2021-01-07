@@ -19,37 +19,41 @@ public class UserBIZImpl implements IUserBIZ {
 	//用户登录
 	public String userLogin(String username, String password,
 			String validatecode, String syscode, HttpServletRequest request) {
+		
+		
 		String chance = userDAO.userGetChance(username);
-
+		String desc = null;
 		if (StringUtil.isEmpty(username)) {
-			return UserLoginEnum.USER_NAME_IS_NUll.getDesc();
+			desc = UserLoginEnum.USER_NAME_IS_NUll.getDesc();
+		} else if (StringUtil.isEmpty(password)) {
+			desc =  UserLoginEnum.USER_PASSWORD_IS_NULL.getDesc();
+		} else if (StringUtil.isEmpty(validatecode) || StringUtil.isEmpty(syscode)) {
+			desc =  UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getDesc();
+		}else if (!validatecode.equals(syscode)) {
+			desc = UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getDesc();
+		}else if ("0".equals(chance) & !"admin".equals(username)) {
+			desc =  UserLoginEnum.USER_FORBIDDEN.getDesc();
+		}else{
+			User user = userDAO.userLogin(username,password);
+			if (user == null) {
+				userDAO.userUpdateChance(username,chance);
+				desc =  UserLoginEnum.USER_NAME_OR_PASSWORD_IS_FAIL.getDesc();
+			}else {
+				// 登录成功后 把当前登录成功后的用户 存入到SESSION中 
+				request.getSession().setAttribute("user", user);
+				request.getSession().setMaxInactiveInterval(300);
+				userDAO.userRecover(username);
+				if ("admin".equals(username)) {
+					IUserBIZ userBIZ = new UserBIZImpl();
+					List<User> users = userBIZ.getForbiddenUsers(request);
+					request.setAttribute("users", users);
+					return "admin.jsp";
+				}else {
+					return "index.jsp";
+				}
+			}
 		}
-		if (StringUtil.isEmpty(password)) {
-			return UserLoginEnum.USER_PASSWORD_IS_NULL.getDesc();
-		}
-		if (StringUtil.isEmpty(validatecode) || StringUtil.isEmpty(syscode)) {
-			return UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getDesc();
-		}
-		if (!validatecode.equals(syscode)) {
-			return UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getDesc();
-		}
-		
-		if ("0".equals(chance) & !"admin".equals(username)) {
-			return UserLoginEnum.USER_FORBIDDEN.getDesc();
-		}
-
-		User user = userDAO.userLogin(username,password);
-		
-		if (user == null) {
-			userDAO.userUpdateChance(username,chance);
-			return UserLoginEnum.USER_NAME_OR_PASSWORD_IS_FAIL.getDesc();
-		}
-		// 登录成功后 把当前登录成功后的用户 存入到SESSION中 
-		request.getSession().setAttribute("user", user);
-		request.getSession().setMaxInactiveInterval(300);
-		userDAO.userRecover(username);
-		
-		return UserLoginEnum.USER_LOGIN_SUCCESS.getDesc();
+		return "user_login.jsp?msg=" + desc;
 	}
 
 	//用户检测
