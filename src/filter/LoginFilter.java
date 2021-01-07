@@ -15,17 +15,11 @@ public class LoginFilter implements Filter {
         System.out.println("LoginFilter doFilter");
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
-        String url = request.getRequestURI();
-
-        int idx = url.lastIndexOf("/");
-        String endWith = url.substring(idx + 1);
-        
         if (!isLogin(request)) {
             response.sendRedirect("user_login.jsp");
         } else {
             chain.doFilter(req, resp);
         }       	
-
     }
 
     private boolean isLogin(HttpServletRequest request) {

@@ -17,17 +17,19 @@ public class UserBIZImpl implements IUserBIZ {
 	IUserDAO userDAO = new UserDAOImpl();
 	
 	//用户登录
-	public String userLogin(String username, String password,
-			String validatecode, String syscode, HttpServletRequest request) {
+	public String userLogin(HttpServletRequest request) {
 		
-		
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String validatecode = request.getParameter("validatecode");
+		String syscode = (String) request.getSession().getAttribute("syscode");
 		String chance = userDAO.userGetChance(username);
 		String desc = null;
 		if (StringUtil.isEmpty(username)) {
 			desc = UserLoginEnum.USER_NAME_IS_NUll.getDesc();
-		} else if (StringUtil.isEmpty(password)) {
+		}else if (StringUtil.isEmpty(password)) {
 			desc =  UserLoginEnum.USER_PASSWORD_IS_NULL.getDesc();
-		} else if (StringUtil.isEmpty(validatecode) || StringUtil.isEmpty(syscode)) {
+		}else if (StringUtil.isEmpty(validatecode) || StringUtil.isEmpty(syscode)) {
 			desc =  UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getDesc();
 		}else if (!validatecode.equals(syscode)) {
 			desc = UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getDesc();
@@ -47,9 +49,9 @@ public class UserBIZImpl implements IUserBIZ {
 					IUserBIZ userBIZ = new UserBIZImpl();
 					List<User> users = userBIZ.getForbiddenUsers(request);
 					request.setAttribute("users", users);
-					return "admin.jsp";
+					return "admin.jsp?msg="+UserLoginEnum.USER_LOGIN_SUCCESS.getDesc();
 				}else {
-					return "index.jsp";
+					return "index.jsp?msg="+UserLoginEnum.USER_LOGIN_SUCCESS.getDesc();
 				}
 			}
 		}
@@ -70,39 +72,36 @@ public class UserBIZImpl implements IUserBIZ {
 	}
 	
 	//用户注册
-	public String userRegister(String username, String password, String againpassword,
-			String email, HttpServletRequest req) {
+	public String userRegister(HttpServletRequest request) {
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		String againpassword = request.getParameter("againpassword");
+		String email = request.getParameter("email");
 		
+		String desc = null;
 		if (StringUtil.isEmpty(username)) {
-			return UserRegisterEnum.USER_REGISTER_NAME_IS_NULL.getDesc();
+			desc = UserRegisterEnum.USER_REGISTER_NAME_IS_NULL.getDesc();
+		}else if (StringUtil.isEmpty(password)) {
+			desc = UserRegisterEnum.USER_REGISTER_PASSWORD_IS_NULL.getDesc();
+		}else if (!ValUtil.checkPassword(password)) {
+			desc = UserRegisterEnum.USER_PASSWORD_LENGTH_INVALID.getDesc();
+		}else if (!ValUtil.checkEmail(email)) {
+			desc = UserRegisterEnum.USER_REGISTER_EMAIL_IS_NULL.getDesc();
+		}else if(!password.equals(againpassword)){
+			desc = UserRegisterEnum.USER_REGISTER_PASSWORDS_DISMATCH.getDesc();
+		}else {
+			User user = userDAO.userToRegister(username);
+			if (user != null) {
+				desc =  UserRegisterEnum.USER_ALREADY_EXIST.getDesc();
+			}else {
+				Integer executeCount = userDAO.userRegister(username, password,email);
+				if(executeCount > 0){
+					return "user_login.jsp?msg=" + UserRegisterEnum.USER_REGISTER_SUCCESS.getDesc();
+				}
+			}
 		}
-		if (StringUtil.isEmpty(password)) {
-			return UserRegisterEnum.USER_REGISTER_PASSWORD_IS_NULL.getDesc();
-		}
-		if (!ValUtil.checkPassword(password)) {
-			return UserRegisterEnum.USER_PASSWORD_LENGTH_INVALID.getDesc();
-		}
-		if (StringUtil.isEmpty(email)) {
-			return UserRegisterEnum.USER_REGISTER_EMAIL_IS_NULL.getDesc();
-		}
-		if(!password.equals(againpassword)){
-			return UserRegisterEnum.USER_REGISTER_PASSWORDS_DISMATCH.getDesc();
-		}
-		
-		User user = null;
-		user = userDAO.userToRegister(username);
-		if (user != null) {
-			return UserRegisterEnum.USER_ALREADY_EXIST.getDesc();
-		}
-		
-		Integer executeCount =  null;
-		executeCount = userDAO.userRegister(username, password,email);
-		if(executeCount > 0){
-			return UserRegisterEnum.USER_REGISTER_SUCCESS.getDesc();
-		}
-		return null;
+		return "user_register.jsp?msg=" + desc;
 	}
-
 
 	//用户恢复注册
 	public void userRecover(String username, HttpServletRequest req) {
