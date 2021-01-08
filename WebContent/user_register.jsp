@@ -18,19 +18,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
 	<script type="text/javascript">
-	<%String msg = request.getParameter("msg");%>
-	<%if (msg!=null && !"登陆成功".equals(msg)) {%>
-	 alert("<%=msg%>");
-	<%}%>
-	</script>
 
+	</script>
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script>
+	    // 显示 loadingS
+		function register_submit(){
+		    $.ajax({
+		        url: 'UserServlet?action=register',
+		        type: 'post',
+		        data: $('#register_form').serialize(), 
+		        success: function (res) {
+		            // Servlet界面不跳转时实行
+		            if (res.substring(0,5)=="alert"){
+		            	alert(res.substring(5,res.length));
+		            }else{
+		            	location.href=res;
+		            } 
+		        },
+
+		    })	    	
+	    }
+	</script>
   </head>
   
    <body >
   	<div style="position: absolute;top:0;bottom: 0;left: 0;right: 0;height: 300px;width: 500px;margin:auto;">
-  	<form action="UserServlet?action=register" method="post">
+  	<form action="UserServlet?action=register" method="post" id="register_form">
   		<center><h1 style="color:red">用户注册</h1>
   		<table style="text-align:justify;text-align-last: justify;">
  			<tr>
@@ -50,7 +66,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   				<td><input type="password" name="againpassword"></td>
   			</tr>		
   			<tr>
-	  			<td><button type="submit">注册</button></td>
+	  			<td><button type="button" onclick="register_submit()">注册</button></td>
 	  			<td><input type="button" value="返回" onclick="location='user_login.jsp'"/></td>
   			</tr>
   		</table></center>

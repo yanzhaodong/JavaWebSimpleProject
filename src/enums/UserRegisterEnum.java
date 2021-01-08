@@ -1,13 +1,12 @@
 package enums;
 
 public enum UserRegisterEnum {
-	USER_REGISTER_NAME_IS_NULL("user_register_name_is_null","用户注册名不能为空"),
-	USER_REGISTER_PASSWORD_IS_NULL("user_register_password_is_null","注册密码不能为空"),
-	USER_REGISTER_EMAIL_IS_NULL("user_register_email_is_null","注册邮箱不能为空"),
-	USER_REGISTER_PASSWORDS_DISMATCH("user_register_passwords_dismatch","密码不一致"),
+	USER_NAME_INVALID("user_register_name_is_null","用户注册名格式不规范"),
+	USER_PASSWORD_INVALID("user_register_password_is_null","注册密码格式不规范"),
+	USER_EMAIL_INVALID("user_register_email_is_null","注册邮箱格式不规范"),
+	USER_PASSWORDS_DISMATCH("user_register_passwords_dismatch","密码不一致"),
 	USER_ALREADY_EXIST("user_already_exist","用户已存在"),
-	USER_PASSWORD_LENGTH_INVALID("user_password_length_invalid","密码长度在6-20之间"),
-	USER_REGISTER_SUCCESS("user_register_success","注册成功");
+	USER_REGISTER_SUCCESS("user_register_success","success");
 	
 	
 	private String value;

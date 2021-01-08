@@ -12,7 +12,7 @@ import enums.UserLoginEnum;
 import enums.UserRegisterEnum;
 import utils.StringUtil;
 import utils.ValUtil;
-import utils.Cast;
+import utils.CastUtil;
 
 public class UserBIZImpl implements IUserBIZ {
 	IUserDAO userDAO = new UserDAOImpl();
@@ -52,13 +52,13 @@ public class UserBIZImpl implements IUserBIZ {
 					IUserBIZ userBIZ = new UserBIZImpl();
 					List<User> forbidden_users = userBIZ.getForbiddenUsers(request);
 					request.getSession().setAttribute("forbidden_users", forbidden_users);
-					return "admin.jsp?msg="+UserLoginEnum.USER_LOGIN_SUCCESS.getDesc();
+					return "admin.jsp";
 				}else {
-					return "index.jsp?msg="+UserLoginEnum.USER_LOGIN_SUCCESS.getDesc();
+					return "index.jsp";
 				}
 			}
 		}
-		return "user_login.jsp?msg=" + desc;
+		return "alert"+desc;
 	}
 	
 	/*
@@ -72,15 +72,13 @@ public class UserBIZImpl implements IUserBIZ {
 		
 		String desc = null;
 		if (StringUtil.isEmpty(username)) {
-			desc = UserRegisterEnum.USER_REGISTER_NAME_IS_NULL.getDesc();
+			desc = UserRegisterEnum.USER_NAME_INVALID.getDesc();
 		}else if (StringUtil.isEmpty(password)) {
-			desc = UserRegisterEnum.USER_REGISTER_PASSWORD_IS_NULL.getDesc();
-		}else if (!ValUtil.checkPassword(password)) {
-			desc = UserRegisterEnum.USER_PASSWORD_LENGTH_INVALID.getDesc();
+			desc = UserRegisterEnum.USER_PASSWORD_INVALID.getDesc();
 		}else if (!ValUtil.checkEmail(email)) {
-			desc = UserRegisterEnum.USER_REGISTER_EMAIL_IS_NULL.getDesc();
+			desc = UserRegisterEnum.USER_EMAIL_INVALID.getDesc();
 		}else if(!password.equals(againpassword)){
-			desc = UserRegisterEnum.USER_REGISTER_PASSWORDS_DISMATCH.getDesc();
+			desc = UserRegisterEnum.USER_PASSWORDS_DISMATCH.getDesc();
 		}else {
 			User user = userDAO.userToRegister(username);
 			if (user != null) {
@@ -88,11 +86,11 @@ public class UserBIZImpl implements IUserBIZ {
 			}else {
 				Integer executeCount = userDAO.userRegister(username, password,email);
 				if(executeCount > 0){
-					return "user_login.jsp?msg=" + UserRegisterEnum.USER_REGISTER_SUCCESS.getDesc();
+					return "user_login.jsp?msg="+UserRegisterEnum.USER_REGISTER_SUCCESS.getDesc();
 				}
 			}
 		}
-		return "user_register.jsp?msg=" + desc;
+		return "alert"+desc;
 	}
 
 	/*
@@ -101,11 +99,11 @@ public class UserBIZImpl implements IUserBIZ {
 	public String userRecover(HttpServletRequest request) {
 		String username = request.getParameter("username");
 		userDAO.userRecover(username);
-		List<User> users = Cast.cast(request.getSession().getAttribute("forbidden_users"));
+		List<User> users = CastUtil.cast(request.getSession().getAttribute("forbidden_users"));
 		for (User user:users) {
 			if (username != null & username.equals(user.getUsername())){
-				users.remove(user);
-				request.getSession().setAttribute("forbidden_users", users);
+				users.remove(user);						
+				request.getSession().setAttribute("forbidden_users", users); //恢复后更新被禁止的用户
 				break;
 			}
 		}

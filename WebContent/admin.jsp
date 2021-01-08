@@ -16,11 +16,11 @@
 	<table  border="1"  >
 		<tr><td>ID</td><td>用户</td><td>邮箱</td><td>操作</td>
 		<%
-			List<User> users = Cast.cast(request.getSession().getAttribute("forbidden_users")); 
+			List<User> users = CastUtil.cast(request.getSession().getAttribute("forbidden_users")); 
 			if (users!=null){
 				for (User user:users){
-					String username = user.getUsername();	
-				%>
+					String username = user.getUsername();
+		%>
 					<tr>
 						<td><%=user.getUserid() %></td>
 						<td><%=username %></td>

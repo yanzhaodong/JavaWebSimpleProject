@@ -18,7 +18,7 @@ public class UserServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		request.setCharacterEncoding("UTF-8");
-		response.setContentType("text/html; charset=utf-8");
+		response.setCharacterEncoding("UTF-8");
 		String action = request.getParameter("action");
 		String result = null;
 		IUserBIZ userBIZ = new UserBIZImpl();
@@ -26,18 +26,26 @@ public class UserServlet extends HttpServlet {
 		try{
 			switch (action) {
 				case "login":
-					result = userBIZ.userLogin(request);				
+					result = userBIZ.userLogin(request);	
+					response.getWriter().write(result); 
 					break;
 				case "register":
 					result = userBIZ.userRegister(request);
+					response.getWriter().write(result); 
 					break;
 				case "recover":
 			        result = userBIZ.userRecover(request);
+			        request.getRequestDispatcher(result).forward(request, response);
 			        break;
 				default:
 					throw new RuntimeException("action名字不合法");
 			}
-			request.getRequestDispatcher(result).forward(request, response);
+			/*
+			 * if (!"alert".equals(result.substring(0, 5))){
+			 * response.getWriter().write(result); }else {
+			 * response.getWriter().write(result.substring(5)); }
+			 */
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
