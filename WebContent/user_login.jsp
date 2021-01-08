@@ -15,12 +15,13 @@
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
 	
 	<% 
-	//检测是否有用户要登出
+	//检测是否有用户登出后访问此页面
 	String isOut = request.getParameter("logout");
 	if ("1".equals(isOut)){
 		session.invalidate();}
 	%>
 	<script>
+	//检测是否有用户注册成功后访问此页面，使得话提示注册成功
 	<%String msg = request.getParameter("msg");%>
 		<%if ("success".equals(msg)) {%>
 		 alert("<%="注册成功"%>");
@@ -44,6 +45,10 @@
 		        },
 		    })	    	
 	    }
+	    function change_image(){
+	    	document.getElementById('btn').isDisabled=true;
+	    	document.getElementById('validateCodeImg').src+='?'+new Date().getTime();
+	    }
 	</script>
 </head>
 <body>
@@ -63,7 +68,8 @@
   			<tr>
   				<td>验 证 码：</td>
   				<td><input name="validatecode"></td>
-  				<td><img alt="验证码看不清，换一张" src="${pageContext.request.contextPath}/DrawImageServlet" id="validateCodeImg" ></td>
+  				<td><img src="${pageContext.request.contextPath}/DrawImageServlet" id="validateCodeImg" onclick="this.src = this.src + '?' + new Date().getTime();"></td>
+  				<td><input type="button" value="看不清，更换验证码" onclick="change_image()" id="btn"  style="vertical-align:middle"></td>
   			</tr>
   			<tr>
 	  			<td><button type="button" onclick="login_submit()">登录</button></td>

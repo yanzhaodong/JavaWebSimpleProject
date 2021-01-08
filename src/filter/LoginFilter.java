@@ -22,7 +22,7 @@ public class LoginFilter implements Filter {
     	if(request.getSession().getAttribute("init")==null){
     		System.out.println("Project Init...");
     		request.getSession().setAttribute("init",1);
-    		response.sendRedirect("UserServlet?action=init");;
+    		response.sendRedirect("UserServlet?action=init");
     	}else {
             String url = request.getRequestURI();
             int idx = url.lastIndexOf("/");
