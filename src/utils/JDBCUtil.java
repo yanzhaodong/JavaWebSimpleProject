@@ -14,15 +14,15 @@ import java.util.Properties;
 public class JDBCUtil {
 	public static Connection getConnection() throws Exception {
 		Connection conn; // 声明connection对象
-		
-		Properties properties = new Properties();  
-		String root = Connection.class.getResource("/").getPath();
-		System.out.println(root);
-		String path = "C:\\projects\\eclipse-workspace\\eclipse-workspace\\src\\config\\Config.properties";
-		InputStreamReader in =new InputStreamReader(new FileInputStream(path),"utf-8");
-		properties.load(in);
-		in.close();
-		System.out.println(properties.getProperty("dbPort"));
+		/*
+		 * Properties properties = new Properties(); String root =
+		 * Connection.class.getResource("/").getPath(); System.out.println(root); String
+		 * path =
+		 * "C:\\projects\\eclipse-workspace\\eclipse-workspace\\src\\config\\Config.properties";
+		 * InputStreamReader in =new InputStreamReader(new
+		 * FileInputStream(path),"utf-8"); properties.load(in); in.close();
+		 * System.out.println(properties.getProperty("dbPort"));
+		 */
 		//InputStream in = JDBCUtil.class.getResourceAsStream("Config.properties");
 
 		
