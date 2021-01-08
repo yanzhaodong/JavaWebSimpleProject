@@ -19,23 +19,17 @@ public class LoginFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
         String username = CastUtil.cast(request.getSession().getAttribute("username"));
-    	if(request.getSession().getAttribute("init")==null){
-    		System.out.println("Project Init...");
-    		request.getSession().setAttribute("init",1);
-    		response.sendRedirect("UserServlet?action=init");
-    	}else {
-            String url = request.getRequestURI();
-            int idx = url.lastIndexOf("/");
-            String endWith = url.substring(idx + 1);
-            
-            //只对admin和普通用户分别登录成功后的情况继续执行
-            if (("admin.jsp".equals(endWith) & "admin".equals(username)) 
-            		|| ("index.jsp".equals(endWith) & username != null & !"admin".equals(username))) {
-            	chain.doFilter(req, resp);
-            }else {
-            	response.sendRedirect("user_login.jsp"); 	
-            } 
-    	}
+        String url = request.getRequestURI();
+        int idx = url.lastIndexOf("/");
+        String endWith = url.substring(idx + 1);
+        
+        
+        if (("admin.jsp".equals(endWith) & "admin".equals(username))  //只对admin和普通用户分别登录成功后的情况不拦截
+        		|| ("index.jsp".equals(endWith) & username != null & !"admin".equals(username))) {
+        	chain.doFilter(req, resp);
+        }else {
+        	response.sendRedirect("user_login.jsp");                  //拦截，回到user_login.jsp	
+        } 
     }
 
 }

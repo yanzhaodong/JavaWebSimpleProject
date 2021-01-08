@@ -37,10 +37,6 @@ public class UserServlet extends HttpServlet {
 			        result = userBIZ.userRecover(request);
 			        request.getRequestDispatcher(result).forward(request, response);
 			        break;
-				case "init":
-					result = userBIZ.adminInit(request);
-					request.getRequestDispatcher(result).forward(request, response);
-					break;
 				default:
 					throw new RuntimeException("action名字不合法");
 			}

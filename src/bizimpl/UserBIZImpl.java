@@ -90,7 +90,7 @@ public class UserBIZImpl implements IUserBIZ {
 				}
 			}
 		}
-		return "alert"+value;
+		return "$"+value;
 	}
 
 	/*
@@ -120,7 +120,7 @@ public class UserBIZImpl implements IUserBIZ {
 	/*
 	 * 初始化管理员
 	 */
-	public String adminInit(HttpServletRequest req) {
+	public String adminInit() {
 		userDAO.adminInit();
 		return "user_login.jsp";
 	}
