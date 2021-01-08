@@ -1,9 +1,6 @@
 package utils;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,30 +11,18 @@ import java.util.Properties;
 public class JDBCUtil {
 	public static Connection getConnection() throws Exception {
 		Connection conn; // 声明connection对象
-		/*
-		 * Properties properties = new Properties(); String root =
-		 * Connection.class.getResource("/").getPath(); System.out.println(root); String
-		 * path =
-		 * "C:\\projects\\eclipse-workspace\\eclipse-workspace\\src\\config\\Config.properties";
-		 * InputStreamReader in =new InputStreamReader(new
-		 * FileInputStream(path),"utf-8"); properties.load(in); in.close();
-		 * System.out.println(properties.getProperty("dbPort"));
-		 */
-		//InputStream in = JDBCUtil.class.getResourceAsStream("Config.properties");
-
 		
-		/*
-		 * try { // 加载属性文件 properties.load(in); } catch (IOException e) {
-		 * System.out.println("配置文件加载失败"); }
-		 */
-		//System.out.println(pro.getProperty("dbPort"));
+		Properties properties = new Properties(); 
+		InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("/config/Config.properties");
+		properties.load(in);
+		in.close();
+		
 
 		String driver = "com.mysql.cj.jdbc.Driver"; // 驱动程序名
-		String url = "jdbc:mysql://localhost:3306/db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
-		// url指向访问的数据库名db
-		String user = "mydb"; // MySQL配置的用户名
-		String password = "secret"; // MySQL配置里的密码
-
+		String url = String.format("jdbc:mysql://%s/%s?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC", 
+				properties.getProperty("dbPort"),properties.getProperty("dbName")); // url指向访问的数据库名db
+		String user = properties.getProperty("dbUser"); // MySQL配置的用户名
+		String password = properties.getProperty("dbPassword"); // MySQL配置里的密码
 		Class.forName(driver); // 加载驱动程序
 		conn = DriverManager.getConnection(url, user, password); // 连接驱动程序
 		return conn;

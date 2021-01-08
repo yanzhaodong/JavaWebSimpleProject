@@ -2,7 +2,6 @@
     pageEncoding="utf-8"%>
 <%@ page import="enums.UserLoginEnum" %>
 <%@ page import="java.awt.image.BufferedImage" %>
-<%@ page import="java.io.FileInputStream" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,6 +26,7 @@
 		<%if ("success".equals(msg)) {%>
 		 alert("<%="注册成功"%>");
 	<%}%>	
+
 	</script>
 	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script>
