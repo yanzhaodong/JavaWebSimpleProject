@@ -27,22 +27,22 @@ public class UserBIZImpl implements IUserBIZ {
 		String validatecode = request.getParameter("validatecode");
 		String syscode = (String) request.getSession().getAttribute("syscode");
 		String chance = userDAO.userGetChance(username);
-		String desc = null;
+		String value = null;
 		if (StringUtil.isEmpty(username)) {
-			desc = UserLoginEnum.USER_NAME_IS_NUll.getDesc();
+			value = UserLoginEnum.USER_NAME_IS_NUll.getValue();
 		}else if (StringUtil.isEmpty(password)) {
-			desc =  UserLoginEnum.USER_PASSWORD_IS_NULL.getDesc();
+			value =  UserLoginEnum.USER_PASSWORD_IS_NULL.getValue();
 		}else if (StringUtil.isEmpty(validatecode) || StringUtil.isEmpty(syscode)) {
-			desc =  UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getDesc();
+			value =  UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getValue();
 		}else if (!validatecode.equals(syscode)) {
-			desc = UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getDesc();
+			value = UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getValue();
 		}else if ("0".equals(chance) & !"admin".equals(username)) {
-			desc =  UserLoginEnum.USER_FORBIDDEN.getDesc();
+			value =  UserLoginEnum.USER_FORBIDDEN.getValue();
 		}else{
 			User user = userDAO.userLogin(username,password);
 			if (user == null) {
 				userDAO.userUpdateChance(username,chance);
-				desc =  UserLoginEnum.USER_NAME_OR_PASSWORD_IS_FAIL.getDesc();
+				value =  UserLoginEnum.USER_NAME_OR_PASSWORD_IS_FAIL.getValue();
 			}else {
 				// 登录成功后 把当前登录成功后的用户 存入到SESSION中 
 				request.getSession().setAttribute("username", username);
@@ -58,7 +58,7 @@ public class UserBIZImpl implements IUserBIZ {
 				}
 			}
 		}
-		return "alert"+desc;
+		return "alert"+value;
 	}
 	
 	/*
@@ -70,27 +70,27 @@ public class UserBIZImpl implements IUserBIZ {
 		String againpassword = request.getParameter("againpassword");
 		String email = request.getParameter("email");
 		
-		String desc = null;
-		if (StringUtil.isEmpty(username)) {
-			desc = UserRegisterEnum.USER_NAME_INVALID.getDesc();
+		String value = "";
+		if (!ValUtil.checkUsername(username)) {
+			value = UserRegisterEnum.USER_NAME_INVALID.getValue();
 		}else if (StringUtil.isEmpty(password)) {
-			desc = UserRegisterEnum.USER_PASSWORD_INVALID.getDesc();
+			value = UserRegisterEnum.USER_PASSWORD_INVALID.getValue();
 		}else if (!ValUtil.checkEmail(email)) {
-			desc = UserRegisterEnum.USER_EMAIL_INVALID.getDesc();
+			value = UserRegisterEnum.USER_EMAIL_INVALID.getValue();
 		}else if(!password.equals(againpassword)){
-			desc = UserRegisterEnum.USER_PASSWORDS_DISMATCH.getDesc();
+			value = UserRegisterEnum.USER_PASSWORDS_DISMATCH.getValue();
 		}else {
 			User user = userDAO.userToRegister(username);
 			if (user != null) {
-				desc =  UserRegisterEnum.USER_ALREADY_EXIST.getDesc();
+				value =  UserRegisterEnum.USER_ALREADY_EXIST.getValue();
 			}else {
 				Integer executeCount = userDAO.userRegister(username, password,email);
 				if(executeCount > 0){
-					return "user_login.jsp?msg="+UserRegisterEnum.USER_REGISTER_SUCCESS.getDesc();
+					return "user_login.jsp?msg=success";
 				}
 			}
 		}
-		return "alert"+desc;
+		return "alert"+value;
 	}
 
 	/*

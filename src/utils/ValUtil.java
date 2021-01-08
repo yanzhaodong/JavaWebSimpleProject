@@ -18,6 +18,15 @@ public class ValUtil {
 		} else {
 			return false;
 		}
+	}
+	
+	public static boolean checkUsername(String username) {
+		String regex = "^[a-zA-Z][\\w_]{2,20}$";            
 
+		if (username.matches(regex)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
