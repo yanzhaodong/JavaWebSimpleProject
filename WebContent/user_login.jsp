@@ -52,7 +52,7 @@
 	</script>
 </head>
 <body>
-  	<div style="position: absolute;top:0;bottom: 0;left: 0;right: 0;height: 300px;width: 500px;margin:auto;">
+  	<div style="position: absolute;top:0;bottom: 0;left: 0;right: 0;height: 300px;width: 600px;margin:auto;">
   	<form action="UserServlet?action=login" method="post" id="login_form">
   		<h1 style="color:red">登录系统</h1>
   		

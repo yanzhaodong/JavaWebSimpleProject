@@ -90,7 +90,7 @@ public class DrawImageServlet extends HttpServlet {
         // 设置颜色
         g.setColor(Color.GREEN);
         // 设置线条个数并画线
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             int x1 = new Random().nextInt(WIDTH);
             int y1 = new Random().nextInt(HEIGHT);
             int x2 = new Random().nextInt(WIDTH);
