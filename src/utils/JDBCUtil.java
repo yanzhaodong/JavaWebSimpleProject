@@ -16,7 +16,7 @@ public class JDBCUtil {
 		Connection conn; // 声明connection对象
 		
 		Properties properties = new Properties();  
-		String path = "C:\\projects\\eclipse-workspace\\eclipse-workspace\\src\\config\\Config.properties";
+		String path = "config\\Config.properties";
 		InputStreamReader in =new InputStreamReader(new FileInputStream(path),"utf-8");
 		properties.load(in);
 		in.close();
