@@ -25,7 +25,7 @@ public class UserBIZImpl implements IUserBIZ {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String validatecode = request.getParameter("validatecode");
-		String syscode = (String) request.getSession().getAttribute("syscode");
+		String syscode = CastUtil.cast(request.getSession().getAttribute("syscode"));
 		String chance = userDAO.userGetChance(username);
 		String value = null;
 		if (StringUtil.isEmpty(username)) {
@@ -120,7 +120,8 @@ public class UserBIZImpl implements IUserBIZ {
 	/*
 	 * 初始化管理员
 	 */
-	public void adminInit(HttpServletRequest req) {
+	public String adminInit(HttpServletRequest req) {
 		userDAO.adminInit();
+		return "user_login.jsp";
 	}
 }

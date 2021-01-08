@@ -4,7 +4,7 @@
     <title>主页面</title>
 </head>
 <body>
-<input type="button" value="登出" style="float:right;" onclick="location='user_login.jsp?logout=1'">
-<h1>这是主页</h1>
+	<input type="button" value="登出" style="float:right;" onclick="location='user_login.jsp?logout=1'">
+	<h1>这是主页</h1>
 </body>
 </html>

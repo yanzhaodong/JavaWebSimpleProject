@@ -15,21 +15,27 @@ public class LoginFilter implements Filter {
     }
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
-        
+
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
         String username = CastUtil.cast(request.getSession().getAttribute("username"));
-        
-        String url = request.getRequestURI();
-        int idx = url.lastIndexOf("/");
-        String endWith = url.substring(idx + 1);
-        
-        if (("admin.jsp".equals(endWith) & "admin".equals(username)) 
-        		|| ("index.jsp".equals(endWith) & username != null & !"admin".equals(username))) {
-        	chain.doFilter(req, resp);
-        }else {
-        	response.sendRedirect("user_login.jsp"); 	
-        }   			
+    	if(request.getSession().getAttribute("init")==null){
+    		System.out.println("Project Init...");
+    		request.getSession().setAttribute("init",1);
+    		response.sendRedirect("UserServlet?action=init");;
+    	}else {
+            String url = request.getRequestURI();
+            int idx = url.lastIndexOf("/");
+            String endWith = url.substring(idx + 1);
+            
+            if (("admin.jsp".equals(endWith) & "admin".equals(username)) 
+            		|| ("index.jsp".equals(endWith) & username != null & !"admin".equals(username))) {
+            	chain.doFilter(req, resp);
+            }else {
+            	response.sendRedirect("user_login.jsp"); 	
+            } 
+    	}
+  			
     }
 
     public void init(FilterConfig config) throws ServletException {

@@ -20,5 +20,5 @@ public interface IUserBIZ {
 	List<User> getForbiddenUsers(HttpServletRequest req);
 	
 	//管理员注册
-	void adminInit(HttpServletRequest req);
+	String adminInit(HttpServletRequest req);
 }
