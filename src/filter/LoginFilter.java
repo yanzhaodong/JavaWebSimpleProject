@@ -28,6 +28,7 @@ public class LoginFilter implements Filter {
             int idx = url.lastIndexOf("/");
             String endWith = url.substring(idx + 1);
             
+            //只对admin和普通用户分别登录成功后的情况继续执行
             if (("admin.jsp".equals(endWith) & "admin".equals(username)) 
             		|| ("index.jsp".equals(endWith) & username != null & !"admin".equals(username))) {
             	chain.doFilter(req, resp);
@@ -35,11 +36,6 @@ public class LoginFilter implements Filter {
             	response.sendRedirect("user_login.jsp"); 	
             } 
     	}
-  			
-    }
-
-    public void init(FilterConfig config) throws ServletException {
-        System.out.println("LoginFilter  init");
     }
 
 }

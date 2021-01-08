@@ -223,7 +223,7 @@ public class UserDAOImpl implements IUserDAO{
 			preparedStatement.setObject(1, username);
 			resultSet = preparedStatement.executeQuery();
 			
-			if (! resultSet.next()) {
+			if (!resultSet.next()) {
 				try {
 					connection = JDBCUtil.getConnection();
 					preparedStatement = connection.prepareStatement("insert into users (username,password,"

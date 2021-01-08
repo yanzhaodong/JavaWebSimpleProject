@@ -73,7 +73,7 @@ public class UserBIZImpl implements IUserBIZ {
 		String value = "";
 		if (!ValUtil.checkUsername(username)) {
 			value = UserRegisterEnum.USER_NAME_INVALID.getValue();
-		}else if (StringUtil.isEmpty(password)) {
+		}else if (!ValUtil.checkPassword(password)) {
 			value = UserRegisterEnum.USER_PASSWORD_INVALID.getValue();
 		}else if (!ValUtil.checkEmail(email)) {
 			value = UserRegisterEnum.USER_EMAIL_INVALID.getValue();
@@ -101,7 +101,7 @@ public class UserBIZImpl implements IUserBIZ {
 		userDAO.userRecover(username);
 		List<User> users = CastUtil.cast(request.getSession().getAttribute("forbidden_users"));
 		for (User user:users) {
-			if (username != null & username.equals(user.getUsername())){
+			if (username != null & user.getUsername().equals(username)){
 				users.remove(user);						
 				request.getSession().setAttribute("forbidden_users", users); //恢复后更新被禁止的用户
 				break;

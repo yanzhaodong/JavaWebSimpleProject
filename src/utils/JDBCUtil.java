@@ -23,7 +23,7 @@ public class JDBCUtil {
 	public static void close(ResultSet resultSet,
 			PreparedStatement preparedStatement, Connection connection) {
 		try {
-			if (resultSet!=null) {
+			if (resultSet != null) {
 				resultSet.close();
 			}
 			preparedStatement.close();
