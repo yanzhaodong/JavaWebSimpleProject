@@ -18,5 +18,7 @@ public interface IUserBIZ {
 	
 	//得到所有用户
 	List<User> getForbiddenUsers(HttpServletRequest req);
-	
+
+	//激活用户
+	String activateUser(HttpServletRequest req);
 }

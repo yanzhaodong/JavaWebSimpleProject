@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import biz.IUserBIZ;
 import bizimpl.UserBIZImpl;
+import utils.MailUtil;
 
 @WebServlet("/UserServlet")
 public class UserServlet extends HttpServlet {
@@ -27,7 +28,7 @@ public class UserServlet extends HttpServlet {
 			switch (action) {
 				case "login":
 					result = userBIZ.userLogin(request);	
-					response.getWriter().write(result); 
+					response.getWriter().write(result);
 					break;
 				case "register":
 					result = userBIZ.userRegister(request);
@@ -37,6 +38,10 @@ public class UserServlet extends HttpServlet {
 			        result = userBIZ.userRecover(request);
 			        request.getRequestDispatcher(result).forward(request, response);
 			        break;
+				case "activate":
+					result = userBIZ.activateUser(request);
+					request.getRequestDispatcher(result).forward(request, response);
+					break;
 				default:
 					throw new RuntimeException("action名字不合法");
 			}

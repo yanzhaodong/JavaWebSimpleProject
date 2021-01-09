@@ -13,7 +13,6 @@
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
-
 	<% 
 	//检测是否有用户登出后访问此页面
 	String isOut = request.getParameter("logout");

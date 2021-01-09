@@ -9,10 +9,12 @@ public interface IUserDAO {
 	User userLogin(String username, String password);
 	
 	//用户注册
-	int userRegister(String username, String password, String email);
+	int userRegister(String username, String password, String email, String code);
 	
 	//判断注册用户名存在否
-	User userToRegister(String username);
+	User usernameRegisterCheck(String username);
+	
+	int emailRegisterCheck(String email);
 	
 	//解除用户禁用状态
 	int userRecover(String username);
@@ -26,5 +28,9 @@ public interface IUserDAO {
 	//得到所有被禁用用户
 	List<User> getForbiddenUsers();
 	
-
+	//检查激活码
+	String checkCode(String code);
+	
+	//激活用户
+	int activateUser(String username);
 }

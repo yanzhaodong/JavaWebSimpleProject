@@ -59,7 +59,7 @@ public class UserDAOImpl implements IUserDAO{
 	/*
 	 * 用户注册过程，判断用户名存在否
 	 */
-	public User userToRegister(String username) {
+	public User usernameRegisterCheck(String username) {
 		User user = null;
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -67,13 +67,19 @@ public class UserDAOImpl implements IUserDAO{
 		
 		try {
 			connection = JDBCUtil.getConnection();
-			preparedStatement = connection.prepareStatement("select username from users where username=?");
+			preparedStatement = connection.prepareStatement("select username,activated from users where username=?");
 			preparedStatement.setObject(1, username);
 			resultSet = preparedStatement.executeQuery();
 			
 			while (resultSet.next()) {
-				user = new User();
-				user.setUsername(resultSet.getString("USERNAME"));
+				if (resultSet.getInt("activated")==0) {
+					preparedStatement = connection.prepareStatement("delete from users where username=?");
+					preparedStatement.setObject(1, resultSet.getString("USERNAME"));
+					preparedStatement.executeUpdate();
+				}else {
+					user = new User();
+					user.setUsername(resultSet.getString("USERNAME"));
+				}
 			}
 
 		} catch (Exception e) {
@@ -84,11 +90,37 @@ public class UserDAOImpl implements IUserDAO{
 		return user;
 	}
 
+	/*
+	 * 用户注册过程，判断邮箱是否可用,暂时废弃
+	 */
+	public int emailRegisterCheck(String email) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		int result = 0;
+		
+		try {
+			connection = JDBCUtil.getConnection();
+			preparedStatement = connection.prepareStatement("select activated from users where email=?");
+			preparedStatement.setObject(1, email);
+			resultSet = preparedStatement.executeQuery();
+			
+			if (resultSet.next()) {
+				result = 1-resultSet.getInt("activated");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			JDBCUtil.close(resultSet, preparedStatement, connection);
+		}
+		return result;
+	}
 	
 	/*
 	 * 用户注册过程，创建新用户
 	 */
-	public int userRegister(String username, String password, String email) {
+	public int userRegister(String username, String password, String email, String code) {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		int executeCount = 0;
@@ -96,11 +128,13 @@ public class UserDAOImpl implements IUserDAO{
 		try {
 			connection = JDBCUtil.getConnection();
 			preparedStatement = connection.prepareStatement("insert into users (username,password,"
-					+ "email,chance) values(?,?,?,?)");
+					+ "email,chance,activated,uuid) values(?,?,?,?,?,?)");
 			preparedStatement.setObject(1, username);
 			preparedStatement.setObject(2, password);
 			preparedStatement.setObject(3, email);
 			preparedStatement.setObject(4, this.chance);
+			preparedStatement.setObject(5, 0);
+			preparedStatement.setObject(6, code);
 			executeCount = preparedStatement.executeUpdate();
 
 		} catch (Exception e) {
@@ -215,5 +249,48 @@ public class UserDAOImpl implements IUserDAO{
 		return users;
 	}
 	
-
+	/* 
+	 * 通过加密的信息来查询用户 
+	 */
+	public String checkCode(String code) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		String username = null;
+		try {
+			connection = JDBCUtil.getConnection();
+			preparedStatement = connection.prepareStatement("select username from users where uuid=?");
+			preparedStatement.setObject(1, code);
+			resultSet = preparedStatement.executeQuery();
+			
+			while (resultSet.next()) {
+				username = resultSet.getString("username");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return username;
+	}
+	
+	/* 激活用户 */
+	public int activateUser(String username) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		int executeCount = 0;
+		
+		try {
+			connection = JDBCUtil.getConnection();
+			preparedStatement = connection.prepareStatement("UPDATE users SET activated = ? WHERE username=?");
+			preparedStatement.setObject(1, 1);
+			preparedStatement.setObject(2, username);
+			executeCount = preparedStatement.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			JDBCUtil.close(resultSet, preparedStatement, connection);
+		}
+		return executeCount;
+	}
+	
 }

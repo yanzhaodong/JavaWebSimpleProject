@@ -1,7 +1,6 @@
 package bizimpl;
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import biz.IUserBIZ;
@@ -11,8 +10,11 @@ import entity.User;
 import enums.UserLoginEnum;
 import enums.UserRegisterEnum;
 import utils.StringUtil;
+import utils.UuidUtil;
 import utils.ValUtil;
 import utils.CastUtil;
+import utils.MailUtil;
+import utils.Md5;
 
 public class UserBIZImpl implements IUserBIZ {
 	IUserDAO userDAO = new UserDAOImpl();
@@ -70,6 +72,17 @@ public class UserBIZImpl implements IUserBIZ {
 		String againpassword = request.getParameter("againpassword");
 		String email = request.getParameter("email");
 		
+		String code = UuidUtil.getUuid();                 //生成随机校验码uuid
+		String encyptedCode = "";
+		System.out.println("uuid code is: "+code);
+		try {
+			encyptedCode = Md5.EncoderByMd5(code);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("saved code is: "+encyptedCode);
+		
 		String value = "";
 		if (!ValUtil.checkUsername(username)) {
 			value = UserRegisterEnum.USER_NAME_INVALID.getValue();
@@ -80,11 +93,13 @@ public class UserBIZImpl implements IUserBIZ {
 		}else if(!password.equals(againpassword)){
 			value = UserRegisterEnum.USER_PASSWORDS_DISMATCH.getValue();
 		}else {
-			User user = userDAO.userToRegister(username);
+			User user = userDAO.usernameRegisterCheck(username);
 			if (user != null) {
 				value =  UserRegisterEnum.USER_ALREADY_EXIST.getValue();
 			}else {
-				Integer executeCount = userDAO.userRegister(username, password,email);
+				//request.getSession().setAttribute("username", username);
+				MailUtil.sendMail(email, code, username);
+				Integer executeCount = userDAO.userRegister(username, password, email, encyptedCode);
 				if(executeCount > 0){
 					return "user_login.jsp?msg=success";
 				}
@@ -93,6 +108,31 @@ public class UserBIZImpl implements IUserBIZ {
 		return "$"+value;
 	}
 
+	/*
+	 *  激活用户
+	 */
+	public String activateUser(HttpServletRequest request){
+		String code = request.getParameter("code");      //从网页过来的未加密的信息
+		String destination = "";
+		try {
+			System.out.println("html raw code is: "+code);
+			code = Md5.EncoderByMd5(code);              //重新加密，看能否跟储存的信息匹配
+			System.out.println("html encrypted code is: "+code);
+			String username = userDAO.checkCode(code);
+			if (username != null) {
+				userDAO.activateUser(username);
+				destination =  "user_login.jsp";
+			}else {
+				destination = "user_register.jsp?msg=failed";
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return destination;
+	}
+	
+	
 	/*
 	 * 用户恢复注册
 	 */
@@ -117,5 +157,6 @@ public class UserBIZImpl implements IUserBIZ {
 		return userDAO.getForbiddenUsers();
 	}
 	
+
 
 }
