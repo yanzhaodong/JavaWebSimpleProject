@@ -5,7 +5,7 @@ public class User {
 	private String username;
 	private String password;
 	private String email;
-	private String chance;
+	private int chance;
 	
 	public User() {
 		
@@ -42,10 +42,10 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getChance() {
+	public int getChance() {
 		return chance;
 	}
-	public void setChance(String chance) {
+	public void setChance(int chance) {
 		this.chance = chance;
 	}
 

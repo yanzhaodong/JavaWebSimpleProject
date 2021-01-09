@@ -18,14 +18,13 @@ public interface IUserDAO {
 	int userRecover(String username);
 
 	//查询用户剩余机会
-	String userGetChance(String username);
+	int userGetChance(String username);
 		
 	//减少用户输错密码机会
-	int userUpdateChance(String username, String chance);
+	int userUpdateChance(String username, int chance);
 	
 	//得到所有被禁用用户
 	List<User> getForbiddenUsers();
 	
-	//管理员注册
-	int adminInit();
+
 }

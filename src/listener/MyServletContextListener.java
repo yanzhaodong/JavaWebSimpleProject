@@ -4,8 +4,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import biz.IUserBIZ;
-import bizimpl.UserBIZImpl;
+import biz.IAdminBIZ;
+import bizimpl.AdminBIZImpl;
 
 /**
  * Application Lifecycle Listener implementation class MyServletContextListener
@@ -14,8 +14,8 @@ import bizimpl.UserBIZImpl;
 @WebListener
 public class MyServletContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce)  { 
-    	IUserBIZ userBIZ= new UserBIZImpl();
-    	userBIZ.adminInit();
+    	IAdminBIZ adminBIZ= new AdminBIZImpl();
+    	adminBIZ.adminInit();
     }
 	
 }

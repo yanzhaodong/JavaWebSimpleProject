@@ -36,25 +36,26 @@
 		        url: 'UserServlet?action=login',
 		        type: 'post',
 		        data: $('#login_form').serialize(), 
-		        success: function (res) {
-		            // Servlet界面不跳转时 
-		            if (res.substring(0,5)=="alert"){
-		            	alert(res.substring(5,res.length));
+		        success: function (res) {									// Servlet界面不跳转时 
+		            if (res.substring(0,5)=="alert"){                      
+		            	alert(res.substring(5,res.length));			        //弹出警示框
+		            	change_image();								        //刷新验证码图片
+		            	document.login_form.validatecode.value="";			//清空验证码文本框
 		            }else{
-		            	location.href=res;
+		            	location.href=res;								    //跳转到指定页面
 		            }
 		        },
 		    })	    	
 	    }
 	    function change_image(){
 	    	document.getElementById('btn').isDisabled=true;
-	    	document.getElementById('validateCodeImg').src+='?'+new Date().getTime();
+	    	document.getElementById('validateCodeImg').src+='?'+new Date().getTime();      //使用Date()生成独一无二的编码
 	    }
 	</script>
 </head>
 <body>
   	<div style="position: absolute;top:0;bottom: 0;left: 0;right: 0;height: 300px;width: 600px;margin:auto;">
-  	<form action="UserServlet?action=login" method="post" id="login_form">
+  	<form action="UserServlet?action=login" method="post" id="login_form" name="login_form">
   		<h1 style="color:red">登录系统</h1>
   		
   		<table style="text-align:justify;text-align-last: justify;">

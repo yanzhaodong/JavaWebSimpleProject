@@ -19,6 +19,4 @@ public interface IUserBIZ {
 	//得到所有用户
 	List<User> getForbiddenUsers(HttpServletRequest req);
 	
-	//管理员注册
-	String adminInit();
 }

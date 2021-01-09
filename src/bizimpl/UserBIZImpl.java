@@ -26,7 +26,7 @@ public class UserBIZImpl implements IUserBIZ {
 		String password = request.getParameter("password");
 		String validatecode = request.getParameter("validatecode");
 		String syscode = CastUtil.cast(request.getSession().getAttribute("syscode"));
-		String chance = userDAO.userGetChance(username);
+		int chance = userDAO.userGetChance(username);
 		String value = null;
 		if (StringUtil.isEmpty(username)) {
 			value = UserLoginEnum.USER_NAME_IS_NUll.getValue();
@@ -36,7 +36,7 @@ public class UserBIZImpl implements IUserBIZ {
 			value =  UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getValue();
 		}else if (!validatecode.equals(syscode)) {
 			value = UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getValue();
-		}else if ("0".equals(chance) & !"admin".equals(username)) {
+		}else if (chance == 0 & !"admin".equals(username)) {
 			value =  UserLoginEnum.USER_FORBIDDEN.getValue();
 		}else{
 			User user = userDAO.userLogin(username,password);
@@ -117,11 +117,5 @@ public class UserBIZImpl implements IUserBIZ {
 		return userDAO.getForbiddenUsers();
 	}
 	
-	/*
-	 * 初始化管理员
-	 */
-	public String adminInit() {
-		userDAO.adminInit();
-		return "user_login.jsp";
-	}
+
 }
