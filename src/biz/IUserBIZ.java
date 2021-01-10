@@ -1,11 +1,13 @@
 package biz;
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import entity.User;
 
+/**
+* 业务层：包含跟用户相关，业务逻辑的接口
+* @author 严照东
+*/
 public interface IUserBIZ {
 	//用户登录
 	String userLogin(HttpServletRequest req);

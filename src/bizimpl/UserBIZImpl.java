@@ -2,7 +2,6 @@ package bizimpl;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-
 import biz.IUserBIZ;
 import dao.IUserDAO;
 import dao.IUserStateDAO;
@@ -18,6 +17,10 @@ import utils.CastUtil;
 import utils.MailUtil;
 import utils.Md5;
 
+/**
+* 业务层：包含跟用户相关，业务逻辑具体实现
+* @author 严照东
+*/
 public class UserBIZImpl implements IUserBIZ {
 	IUserDAO userDAO = new UserDAOImpl();
 	IUserStateDAO userStateDAO = new UserStateDAOImpl();

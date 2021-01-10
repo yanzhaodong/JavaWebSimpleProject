@@ -24,13 +24,13 @@ public class ValUtil {
 	}
 
 	/*
-	 * 验证用户名是否规范
+	 * 验证用户名是否规范:长度要在3-20之间
      * @methodsName: checkUsername
      * @param: password          输入的用户名
      * @return: boolean		     用户名格式是否规范
 	 */
 	public static boolean checkUsername(String username) {
-		String regex = "^[a-zA-Z][\\w_]{2,20}$";            
+		String regex = "^[a-zA-Z][\\w_]{2,19}$";            
 
 		if (username.matches(regex)) {
 			return true;
@@ -40,7 +40,7 @@ public class ValUtil {
 	}
 	
 	/*
-	 * 验证密码是否规范
+	 * 验证密码是否规范：长度要在6到20之间
      * @methodsName: checkPassword
      * @param: password          输入的密码
      * @return: boolean		     密码格式是否规范

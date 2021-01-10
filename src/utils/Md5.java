@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.MessageDigest;
 import java.util.Base64;
+
 /**
 * 加密相关的工具类
 * @author 严照东

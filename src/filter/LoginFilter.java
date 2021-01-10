@@ -14,9 +14,6 @@ import java.io.IOException;
 */
 @WebFilter(filterName = "LoginFilter", urlPatterns = {"/index.jsp","/admin.jsp"}, dispatcherTypes = {})
 public class LoginFilter implements Filter {
-    public void destroy() {
-    }
-
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
@@ -24,7 +21,6 @@ public class LoginFilter implements Filter {
         String url = request.getRequestURI();
         int idx = url.lastIndexOf("/");
         String endWith = url.substring(idx + 1);
-        
         
         if (("admin.jsp".equals(endWith) & "admin".equals(username))  //只对admin和普通用户分别登录成功后的情况不拦截
         		|| ("index.jsp".equals(endWith) & username != null & !"admin".equals(username))) {
