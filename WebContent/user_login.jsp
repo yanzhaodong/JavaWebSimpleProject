@@ -36,8 +36,8 @@
 		        type: 'post',
 		        data: $('#login_form').serialize(), 
 		        success: function (res) {									// Servlet界面不跳转时 
-		            if (res.substring(0,5)=="alert"){                      
-		            	alert(res.substring(5,res.length));			        //弹出警示框
+		            if (res[0] == "$"){                      
+		            	alert(res.substring(1,res.length));			        //弹出警示框
 		            	change_image();								        //刷新验证码图片
 		            	document.login_form.validatecode.value="";			//清空验证码文本框
 		            }else{

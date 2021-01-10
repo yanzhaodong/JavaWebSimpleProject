@@ -1,6 +1,8 @@
 package daoimpl;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,13 +10,19 @@ import java.util.Properties;
 
 import dao.IAdminDAO;
 import utils.JDBCUtil;
+import utils.Md5;
+
+/**
+* 包含跟管理员用户相关，数据库层面的操作的具体实现
+* @author 严照东
+*/
 
 public class AdminDAOImpl implements IAdminDAO{
 	private int chance;
 	private String admin_username;
 	private String admin_password;
 	private String admin_email;
-	public AdminDAOImpl() {
+	public AdminDAOImpl()  {
 		Properties properties = new Properties(); 
 		InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("/config/Config.properties");
 		try {
@@ -25,12 +33,19 @@ public class AdminDAOImpl implements IAdminDAO{
 		}
 		this.chance = Integer.valueOf(properties.getProperty("chance")) ;
 		this.admin_username = properties.getProperty("adminUsername");
-		this.admin_password = properties.getProperty("adminPassword");
+		try {
+			this.admin_password = Md5.EncoderByMd5(properties.getProperty("adminPassword"));
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		this.admin_email = properties.getProperty("adminEmail");
 	}
 	
 	/*
-	 * 管理员注册
+     * @methodsName: adminInit
+     * @description: 根据properties里的信息，初始化管理员
+     * @return: int  插入的用户数量
+     * @throws:
 	 */
 	public int adminInit() {
 		Connection connection = null;

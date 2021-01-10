@@ -13,12 +13,14 @@ public interface IUserBIZ {
 	//用户注册
 	String userRegister(HttpServletRequest req);
 	
+	//激活用户
+	String activateUser(HttpServletRequest req);
+	
 	//用户恢复
 	String userRecover(HttpServletRequest req);
 	
 	//得到所有用户
-	List<User> getForbiddenUsers(HttpServletRequest req);
+	List<User> getForbiddenUsers();
 
-	//激活用户
-	String activateUser(HttpServletRequest req);
+
 }

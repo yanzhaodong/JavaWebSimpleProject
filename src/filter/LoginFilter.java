@@ -8,14 +8,16 @@ import javax.servlet.http.HttpServletResponse;
 import utils.CastUtil;
 
 import java.io.IOException;
-
+/**
+* 对于未登录状态下进入admin.jsp与index.jsp的操作进行拦截
+* @author 严照东
+*/
 @WebFilter(filterName = "LoginFilter", urlPatterns = {"/index.jsp","/admin.jsp"}, dispatcherTypes = {})
 public class LoginFilter implements Filter {
     public void destroy() {
     }
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
-
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
         String username = CastUtil.cast(request.getSession().getAttribute("username"));

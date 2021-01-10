@@ -24,7 +24,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</script>
 	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script>
-	    // 显示 loadingS
+	    // 显示 loading
 		function register_submit(){
 		    $.ajax({
 		        url: 'UserServlet?action=register',
@@ -32,8 +32,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        data: $('#register_form').serialize(), 
 		        success: function (res) {
 		            // Servlet界面不跳转时实行
-		            if (res.substring(0,5)=="alert"){
-		            	alert(res.substring(5,res.length));
+		            if (res[0] =="$"){
+		            	alert(res.substring(1,res.length));
 		            }else{
 		            	location.href=res;
 		            } 

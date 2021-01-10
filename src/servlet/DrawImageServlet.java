@@ -14,8 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 /**
- * 生成随机图片，用来作为验证码
- */
+* 生成随机图片，用来作为登录验证码
+* @author 严照东
+*/
 @WebServlet("/DrawImageServlet")
 public class DrawImageServlet extends HttpServlet {
     private static final long serialVersionUID = 3038623696184546092L;

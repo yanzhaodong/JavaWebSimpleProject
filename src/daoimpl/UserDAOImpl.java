@@ -4,13 +4,18 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import dao.IUserDAO;
 import entity.User;
 import utils.JDBCUtil;
+import utils.Md5;
+
+/**
+* 包含跟用户登录注册相关, 数据层面方法的具体实现
+* @author 严照东
+*/
+
 public class UserDAOImpl implements IUserDAO{
 	private int chance;
 	public UserDAOImpl() {
@@ -24,27 +29,35 @@ public class UserDAOImpl implements IUserDAO{
 		}
 		this.chance = Integer.valueOf(properties.getProperty("chance")) ;
 	}
+	
 	/*
-	 * 用户登录，查询用户是否存在
+     * @methodsName: usernameRegisterCheck
+     * @description: 用户登录的时候，查询是否存在有指定用户名和密码,并已激活的用户
+     * @param:  username     用户输入的用户名
+     * @param:  password     用户输入的密码
+     * @return: int			 查询后的状态码 -> 0：用户名或者密码不正确； 1：用户未激活 2：可以成功登录
+     * @throws:
 	 */
-	public User userLogin(String username, String password) {
-		User user = null;
+	public int userLogin(String username, String password) {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
+		int result = 0;    
 		
 		try {
+			String encryptedPassword = Md5.EncoderByMd5(password);
 			connection = JDBCUtil.getConnection();
-			preparedStatement = connection.prepareStatement("select id,username,password from users where username=? and password=?");
+			preparedStatement = connection.prepareStatement("select id,username,password,activated from users where username=? and password=?");
 			preparedStatement.setObject(1, username);
-			preparedStatement.setObject(2, password);
+			preparedStatement.setObject(2, encryptedPassword);
 			resultSet = preparedStatement.executeQuery();
 			
-			while (resultSet.next()) {
-				user = new User();
-				user.setUserid(resultSet.getInt("id"));
-				user.setUsername(resultSet.getString("username"));
-				user.setPassword(resultSet.getString("password"));
+			if (resultSet.next()) {
+				if (resultSet.getInt("activated")==0) {
+					result = 1;
+				}else {
+					result = 2;
+				}
 			}
 
 		}catch (Exception e) {
@@ -52,12 +65,15 @@ public class UserDAOImpl implements IUserDAO{
 		}finally {
 			JDBCUtil.close(resultSet, preparedStatement, connection);
 		}
-		return user;
+		return result;
 	}
 	
 	
 	/*
-	 * 用户注册过程，判断用户名存在否
+     * @methodsName: usernameRegisterCheck
+     * @description: 注册的时候检查用户的名字，如果用户名已存在且已激活，则不能注册，反之可以注册
+     * @param:  username     用户输入的注册用户名
+     * @return: User         注册后的用户
 	 */
 	public User usernameRegisterCheck(String username) {
 		User user = null;
@@ -72,7 +88,7 @@ public class UserDAOImpl implements IUserDAO{
 			resultSet = preparedStatement.executeQuery();
 			
 			while (resultSet.next()) {
-				if (resultSet.getInt("activated")==0) {
+				if (resultSet.getInt("activated") == 0) {
 					preparedStatement = connection.prepareStatement("delete from users where username=?");
 					preparedStatement.setObject(1, resultSet.getString("USERNAME"));
 					preparedStatement.executeUpdate();
@@ -90,35 +106,16 @@ public class UserDAOImpl implements IUserDAO{
 		return user;
 	}
 
-	/*
-	 * 用户注册过程，判断邮箱是否可用,暂时废弃
-	 */
-	public int emailRegisterCheck(String email) {
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		int result = 0;
-		
-		try {
-			connection = JDBCUtil.getConnection();
-			preparedStatement = connection.prepareStatement("select activated from users where email=?");
-			preparedStatement.setObject(1, email);
-			resultSet = preparedStatement.executeQuery();
-			
-			if (resultSet.next()) {
-				result = 1-resultSet.getInt("activated");
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			JDBCUtil.close(resultSet, preparedStatement, connection);
-		}
-		return result;
-	}
 	
 	/*
-	 * 用户注册过程，创建新用户
+     * @methodsName: usernameRegister
+     * @description: 用户注册成功后创建新用户
+     * @param:  username     用户输入的注册用户名
+     * @param:  password     用户输入的注册密码
+     * @param:  email     用户输入的注册邮箱
+     * @param:  code      系统生成的激活验证码
+     * @return: int		  插入的用户数量
+     * @throws:
 	 */
 	public int userRegister(String username, String password, String email, String code) {
 		Connection connection = null;
@@ -126,11 +123,12 @@ public class UserDAOImpl implements IUserDAO{
 		int executeCount = 0;
 		
 		try {
+			String encryptedPassword = Md5.EncoderByMd5(password);
 			connection = JDBCUtil.getConnection();
 			preparedStatement = connection.prepareStatement("insert into users (username,password,"
 					+ "email,chance,activated,uuid) values(?,?,?,?,?,?)");
 			preparedStatement.setObject(1, username);
-			preparedStatement.setObject(2, password);
+			preparedStatement.setObject(2, encryptedPassword);
 			preparedStatement.setObject(3, email);
 			preparedStatement.setObject(4, this.chance);
 			preparedStatement.setObject(5, 0);
@@ -145,152 +143,7 @@ public class UserDAOImpl implements IUserDAO{
 		return executeCount;
 	}
 	
-	/*
-	 * 解除用户禁用状态
-	 */
-	public int userRecover(String username){
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		int executeCount = 0;
-		
-		try {
-			connection = JDBCUtil.getConnection();
-			preparedStatement = connection.prepareStatement("UPDATE users SET chance = '3' WHERE username=?");
-			preparedStatement.setObject(1, username);
-			executeCount = preparedStatement.executeUpdate();
-		}catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			JDBCUtil.close(null, preparedStatement, connection);
-		}
-		return executeCount;
-	}
 
-	/*
-	 * 查询用户剩余机会
-	 */
-	public int userGetChance(String username){
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		int chance = 0;
-		try {
-			connection = JDBCUtil.getConnection();
-			preparedStatement = connection.prepareStatement("select chance from users where username=?");
-			preparedStatement.setObject(1, username);
-			resultSet = preparedStatement.executeQuery();
-			
-			while (resultSet.next()) {
-				chance = resultSet.getInt("chance");
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
-		}	
-		return chance;
-	}
-	
-	/*
-	 * 减少用户输错密码机会
-	 */
-	public int userUpdateChance(String username, int chance){
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		int executeCount = 0;
-		try {
-			connection = JDBCUtil.getConnection();
-			preparedStatement = connection.prepareStatement("select chance from users where username=?");
-			preparedStatement.setObject(1, username);
-			resultSet = preparedStatement.executeQuery();
-			
-			while (resultSet.next()) {
-				chance = resultSet.getInt("chance");
-			}
-			preparedStatement.close();
-			int newChance = this.chance;
-			if (chance != 0) {
-				newChance = Integer.valueOf(chance)-1;}
-			preparedStatement = connection.prepareStatement("UPDATE users SET chance = ? WHERE username=?");
-			preparedStatement.setObject(1, newChance);
-			preparedStatement.setObject(2, username);
-			executeCount = preparedStatement.executeUpdate();
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			JDBCUtil.close(null, preparedStatement, connection);
-		}
-		return executeCount;
-	}
-	
-	/*
-	 * 得到所有被禁用用户
-	 */
-	public List<User> getForbiddenUsers() {
-		List<User> users = new ArrayList<User>();
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		
-		try {
-			connection = JDBCUtil.getConnection();
-			preparedStatement = connection.prepareStatement("select id,username,email from users where chance=?");
-			preparedStatement.setObject(1, 0);
-			resultSet = preparedStatement.executeQuery();
-			
-			while (resultSet.next()) {
-				users.add(new User(resultSet.getInt("id"),resultSet.getString("username"),resultSet.getString("email")));
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			JDBCUtil.close(resultSet, preparedStatement, connection);
-		}
-		return users;
-	}
-	
-	/* 
-	 * 通过加密的信息来查询用户 
-	 */
-	public String checkCode(String code) {
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		String username = null;
-		try {
-			connection = JDBCUtil.getConnection();
-			preparedStatement = connection.prepareStatement("select username from users where uuid=?");
-			preparedStatement.setObject(1, code);
-			resultSet = preparedStatement.executeQuery();
-			
-			while (resultSet.next()) {
-				username = resultSet.getString("username");
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		return username;
-	}
-	
-	/* 激活用户 */
-	public int activateUser(String username) {
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		int executeCount = 0;
-		
-		try {
-			connection = JDBCUtil.getConnection();
-			preparedStatement = connection.prepareStatement("UPDATE users SET activated = ? WHERE username=?");
-			preparedStatement.setObject(1, 1);
-			preparedStatement.setObject(2, username);
-			executeCount = preparedStatement.executeUpdate();
-		}catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			JDBCUtil.close(resultSet, preparedStatement, connection);
-		}
-		return executeCount;
-	}
+
 	
 }

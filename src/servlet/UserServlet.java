@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import biz.IUserBIZ;
 import bizimpl.UserBIZImpl;
-import utils.MailUtil;
 
 @WebServlet("/UserServlet")
 public class UserServlet extends HttpServlet {
@@ -26,8 +25,8 @@ public class UserServlet extends HttpServlet {
 		//根据request里的action判断要执行什么动作
 		try{
 			switch (action) {
-				case "login":
-					result = userBIZ.userLogin(request);	
+				case "login":								
+					result = userBIZ.userLogin(request);
 					response.getWriter().write(result);
 					break;
 				case "register":

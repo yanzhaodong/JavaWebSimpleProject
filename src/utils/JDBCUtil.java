@@ -8,8 +8,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+* 数据库连接相关的工具类
+* @author 严照东
+*/
 public class JDBCUtil {
-	/* 连接数据库，并返回connection */
+	/*
+	 * 连接数据库，并返回connection
+     * @methodsName: getConnection
+     * @return: Connection  数据库的连接对象
+     * @throws: Exception
+	 */
 	public static Connection getConnection() throws Exception {
 		Connection conn; // 声明connection对象
 
@@ -28,7 +37,13 @@ public class JDBCUtil {
 		return conn;
 	}
 	
-	/* 关闭数据库连接*/
+	/*
+	 * 关闭数据库连接
+     * @methodsName: close
+     * @param: resultSet               数据库连接的ResultSet对象
+     * @param: preparedStatement       数据库连接的PreparedStatementt对象
+     * @param: connection              数据库连接的Connection对象
+	 */
 	public static void close(ResultSet resultSet, PreparedStatement preparedStatement, Connection connection) {
 		try {
 			if (resultSet != null) {

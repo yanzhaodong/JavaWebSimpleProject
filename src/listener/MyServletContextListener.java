@@ -8,14 +8,15 @@ import biz.IAdminBIZ;
 import bizimpl.AdminBIZImpl;
 
 /**
- * Application Lifecycle Listener implementation class MyServletContextListener
- */
+* 监听界面初始化事件，并初始化管理员账户
+* @author 严照东
+*/
 
 @WebListener
 public class MyServletContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce)  { 
     	IAdminBIZ adminBIZ= new AdminBIZImpl();
-    	adminBIZ.adminInit();
+		adminBIZ.adminInit();
     }
 	
 }
