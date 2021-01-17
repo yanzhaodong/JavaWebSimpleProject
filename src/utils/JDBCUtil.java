@@ -13,7 +13,7 @@ import java.util.Properties;
 * @author 严照东
 */
 public class JDBCUtil {
-	/*
+	/**
 	 * 连接数据库，并返回connection
      * @methodsName: getConnection
      * @return: Connection  数据库的连接对象
@@ -36,7 +36,7 @@ public class JDBCUtil {
 		return conn;
 	}
 	
-	/*
+	/**
 	 * 关闭数据库连接
      * @methodsName: close
      * @param: resultSet               数据库连接的ResultSet对象

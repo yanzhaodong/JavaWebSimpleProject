@@ -15,7 +15,7 @@ public class ImageUtil {
     public static final int WIDTH = 120;//生成的图片的宽度
     public static final int HEIGHT = 30;//生成的图片的高度
     
-	/*
+	/**
 	 * 设置图片格式信息并画图
      * @methodsName: drawImage
      * @param: text            生成的图片对应的验证码文字

@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
+
 import biz.IUserBIZ;
 import bizimpl.UserBIZImpl;
 
@@ -25,6 +27,7 @@ public class UserServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		String action = request.getParameter("action");
 		String result = null;
+		String temp = null;
 		IUserBIZ userBIZ = new UserBIZImpl();
 		//根据request里的action判断要执行什么动作
 		try{
@@ -34,16 +37,16 @@ public class UserServlet extends HttpServlet {
 					response.getWriter().write(result);
 					break;
 				case "register":
-					result = userBIZ.userRegister(request);
-					response.getWriter().write(result); 
+					temp = userBIZ.userRegister(request);
+					response.getWriter().write(temp); 
 					break;
 				case "recover":
-			        result = userBIZ.userRecover(request);
-			        request.getRequestDispatcher(result).forward(request, response);
+			        temp = userBIZ.userRecover(request);
+			        request.getRequestDispatcher(temp).forward(request, response);
 			        break;
 				case "activate":
-					result = userBIZ.activateUser(request);
-					request.getRequestDispatcher(result).forward(request, response);
+					temp = userBIZ.activateUser(request);
+					request.getRequestDispatcher(temp).forward(request, response);
 					break;
 				default:
 					throw new RuntimeException("action名字不合法");

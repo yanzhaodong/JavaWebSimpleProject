@@ -25,7 +25,7 @@ public class LoginFilter implements Filter {
         if (("admin.jsp".equals(endWith) && "admin".equals(username))  //只对admin和普通用户分别登录成功后的情况不拦截
         		|| ("index.jsp".equals(endWith) && username != null && !"admin".equals(username))) {
         	chain.doFilter(req, resp);
-        }else {
+        } else {
         	response.sendRedirect("user_login.jsp");                  //拦截，回到user_login.jsp	
         } 
     }

@@ -9,7 +9,7 @@ public enum UserLoginEnum {
 	USER_LOGIN_SUCCESS("登录成功"),
 	USER_NOT_ACTIVATED("用户未激活");
 	
-	private String value;
+	public String value;
 	
 	private UserLoginEnum(String value) {
 		this.value = value;

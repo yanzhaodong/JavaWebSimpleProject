@@ -32,9 +32,9 @@ public class UserStateDAOImpl implements IUserStateDAO{
 			preparedStatement = connection.prepareStatement("UPDATE users SET chance = '3' WHERE username=?");
 			preparedStatement.setObject(1, username);
 			executeCount = preparedStatement.executeUpdate();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			JDBCUtil.close(null, preparedStatement, connection);
 		}
 		return executeCount;
@@ -61,7 +61,7 @@ public class UserStateDAOImpl implements IUserStateDAO{
 			while (resultSet.next()) {
 				chance = resultSet.getInt("chance");
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}	
 		return chance;
@@ -84,9 +84,9 @@ public class UserStateDAOImpl implements IUserStateDAO{
 			preparedStatement = connection.prepareStatement("UPDATE users SET chance = chance-'1' WHERE username=?");
 			preparedStatement.setObject(1, username);
 			executeCount = preparedStatement.executeUpdate();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			JDBCUtil.close(resultSet, preparedStatement, connection);
 		}
 		return executeCount;
@@ -113,9 +113,9 @@ public class UserStateDAOImpl implements IUserStateDAO{
 			while (resultSet.next()) {
 				users.add(new User(resultSet.getInt("id"),resultSet.getString("username"),resultSet.getString("email")));
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			JDBCUtil.close(resultSet, preparedStatement, connection);
 		}
 		return users;
@@ -142,7 +142,7 @@ public class UserStateDAOImpl implements IUserStateDAO{
 			while (resultSet.next()) {
 				username = resultSet.getString("username");
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return username;
@@ -167,9 +167,9 @@ public class UserStateDAOImpl implements IUserStateDAO{
 			preparedStatement.setObject(1, 1);
 			preparedStatement.setObject(2, username);
 			executeCount = preparedStatement.executeUpdate();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			JDBCUtil.close(resultSet, preparedStatement, connection);
 		}
 		return executeCount;

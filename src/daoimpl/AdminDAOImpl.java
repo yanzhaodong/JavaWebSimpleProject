@@ -28,7 +28,7 @@ public class AdminDAOImpl implements IAdminDAO{
 		try {
 			properties.load(in);
 			in.close();
-		}catch(Exception e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		this.chance = Integer.valueOf(properties.getProperty("chance")) ;
@@ -72,9 +72,9 @@ public class AdminDAOImpl implements IAdminDAO{
 					preparedStatement.setObject(5, 1);
 					executeCount = preparedStatement.executeUpdate();
 					
-				}catch (Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
-				}finally {
+				} finally {
 					JDBCUtil.close(null, preparedStatement, connection);
 				}
 			}

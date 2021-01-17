@@ -6,7 +6,7 @@ package utils;
 */
 public class FormatValidationUtil {
 	
-	/*
+	/**
 	 * 验证邮箱是否规范
      * @methodsName: checkEmail
      * @param: password          输入的邮箱
@@ -23,7 +23,7 @@ public class FormatValidationUtil {
 		}
 	}
 
-	/*
+	/**
 	 * 验证用户名是否规范:长度要在3-20之间
      * @methodsName: checkUsername
      * @param: password          输入的用户名
@@ -39,7 +39,7 @@ public class FormatValidationUtil {
 		}
 	}
 	
-	/*
+	/**
 	 * 验证密码是否规范：长度要在6到20之间
      * @methodsName: checkPassword
      * @param: password          输入的密码

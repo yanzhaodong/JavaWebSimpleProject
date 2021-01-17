@@ -5,7 +5,7 @@ package utils;
 * @author 严照东
 */
 public class CastUtil {
-	/*
+	/**
      * @methodsName: cast
      * @param: obj          需要被cast的对象
      * @return: Object		cast后的对象

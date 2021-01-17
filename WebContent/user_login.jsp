@@ -34,14 +34,16 @@
 		        url: 'UserServlet?action=login',
 		        type: 'post',
 		        data: $('#login_form').serialize(), 
-		        success: function (res) {									// Servlet界面不跳转时 
-		            if (res[0] == "$"){                      
-		            	alert(res.substring(1,res.length));			        //弹出警示框
-		            	change_image();								        //刷新验证码图片
-		            	document.login_form.validatecode.value="";			//清空验证码文本框
-		            }else{
-		            	location.href=res;								    //跳转到指定页面
-		            }
+		        success: function (res) {									// Servlet界面不跳转时
+		        	system.out.println(res);
+		        	var jsonValue = JSON.parse(要解析的字段);
+		            var address = jsonValue.ADDRESS;
+		        	if (!address){
+		            	alert(obj.getString("ERRORCODE"));
+	            		change_image();								        //刷新验证码图片
+	            		document.login_form.validatecode.value="";			//清空验证码文本框			        		
+		        	}
+	            	location.href=obj.getString("ADDRESS");								    //跳转到指定页面		        	
 		        },
 		    })	    	
 	    }

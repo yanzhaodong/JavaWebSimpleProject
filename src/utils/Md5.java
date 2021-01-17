@@ -10,7 +10,7 @@ import java.util.Base64;
 * @author 严照东
 */
 public class Md5 {
-	/*
+	/**
      * @methodsName: EncoderByMd5
      * @description: 利用MD5进行加密
      * @return: String

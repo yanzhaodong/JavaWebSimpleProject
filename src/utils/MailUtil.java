@@ -19,7 +19,7 @@ import com.sun.mail.util.MailSSLSocketFactory;
 * @author 严照东
 */
 public class MailUtil {
-	/*
+	/**
      * @methodsName: sendMail
      * @description: 发送邮件
      * @param: to       收件人地址
@@ -36,6 +36,7 @@ public class MailUtil {
 			in.close();
 			String from = properties.getProperty("emailFrom");
 			String validationCode = properties.getProperty("validationCode");
+			String ip = properties.getProperty("ip");
 			// 配置
 			Properties prop=new Properties();
 			// 设置邮件服务器主机名，这里是163
@@ -73,8 +74,8 @@ public class MailUtil {
 		    // 邮件主题
 		    message.setSubject("激活邮件");
 		    String content = "<html><head></head><body><h1>请点击连接激活,如果打不开，请复制下列地址到网址栏</h1><h3>"
-		    		+ "<a href='http://localhost:8080/WebProject/UserServlet?action=activate&code="+code+"'>"
-		    		+ "http://localhost:8080/WebProject/UserServlet?action=activate&code=" + code + "</href></h3></body></html>";
+		    		+ "<a href='http://"+ip+":8080/WebProject/UserServlet?action=activate&code="+code+"'>"
+		    		+ "http://"+ip+":8080/WebProject/UserServlet?action=activate&code=" + code + "</href></h3></body></html>";
 		    message.setContent(content, "text/html;charset=UTF-8");
 		    // 邮件发送
 		    Transport transport = session.getTransport();

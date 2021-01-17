@@ -24,7 +24,7 @@ public class UserDAOImpl implements IUserDAO{
 		try {
 			properties.load(in);
 			in.close();
-		}catch(Exception e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		this.chance = Integer.valueOf(properties.getProperty("chance")) ;
@@ -35,7 +35,7 @@ public class UserDAOImpl implements IUserDAO{
      * @description: 用户登录的时候，查询是否存在有指定用户名和密码,并已激活的用户
      * @param:  username     用户输入的用户名
      * @param:  password     用户输入的密码
-     * @return: int			 查询后的状态码 -> 0：用户名或者密码不正确； 1：用户未激活 2：可以成功登录
+     * @return: String			 查询后的状态码 -> 0：用户名或者密码不正确; 1：用户未激活; 2：可以成功登录
      * @throws:
 	 */
 	public int userLogin(String username, String password) {
@@ -55,7 +55,7 @@ public class UserDAOImpl implements IUserDAO{
 			if (resultSet.next()) {
 				if (resultSet.getInt("activated")==0) {
 					result = 1;
-				}else {
+				} else {
 					result = 2;
 				}
 			}
@@ -92,7 +92,7 @@ public class UserDAOImpl implements IUserDAO{
 					preparedStatement = connection.prepareStatement("delete from users where username=?");
 					preparedStatement.setObject(1, resultSet.getString("USERNAME"));
 					preparedStatement.executeUpdate();
-				}else {
+				} else {
 					user = new User();
 					user.setUsername(resultSet.getString("USERNAME"));
 				}
