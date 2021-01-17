@@ -15,7 +15,7 @@ import utils.JDBCUtil;
 * @author 严照东
 */
 public class UserStateDAOImpl implements IUserStateDAO{
-	/*
+	/**
      * @methodsName: userRecover
      * @description: 解除用户禁用状态
      * @param:  username     用户输入的注册用户名
@@ -40,7 +40,7 @@ public class UserStateDAOImpl implements IUserStateDAO{
 		return executeCount;
 	}
 
-	/*
+	/**
      * @methodsName: userGetChance
      * @description: 查询用户剩余机会
      * @param:  username     用户输入的注册用户名
@@ -67,7 +67,7 @@ public class UserStateDAOImpl implements IUserStateDAO{
 		return chance;
 	}
 	
-	/*
+	/**
      * @methodsName: userUpdateChance
      * @description: 减少用户剩余连续输错密码机会
      * @param:  username     需要减少机会的用户名
@@ -92,7 +92,7 @@ public class UserStateDAOImpl implements IUserStateDAO{
 		return executeCount;
 	}
 	
-	/*
+	/**
      * @methodsName: userGetChance
      * @description: 得到所有被禁用的用户
      * @return: List<User>   所有被禁用的用户
@@ -121,7 +121,7 @@ public class UserStateDAOImpl implements IUserStateDAO{
 		return users;
 	}
 	
-	/*
+	/**
      * @methodsName: checkCode
      * @description: 通过激活验证码来查询用户
      * @param:  code      用户的激活验证码
@@ -148,7 +148,7 @@ public class UserStateDAOImpl implements IUserStateDAO{
 		return username;
 	}
 	
-	/*
+	/**
      * @methodsName: checkCode
      * @description: 激活用户
      * @param:  username      需要被激活用户的用户名

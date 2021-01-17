@@ -27,9 +27,8 @@ public class JDBCUtil {
 		properties.load(in);
 		in.close();
 		
-		String driver = "com.mysql.cj.jdbc.Driver"; 											// 驱动程序名
-		String url = String.format("jdbc:mysql://%s/%s?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC", 
-				properties.getProperty("dbPort"),properties.getProperty("dbName")); 			// url指向访问的数据库名db
+		String driver = properties.getProperty("driver"); 											// 驱动程序名
+		String url = properties.getProperty("url");                                 			// url指向访问的数据库名db
 		String user = properties.getProperty("dbUser"); 										// MySQL配置的用户名
 		String password = properties.getProperty("dbPassword"); 								// MySQL配置里的密码
 		Class.forName(driver); 																	// 加载驱动程序

@@ -20,12 +20,11 @@
 		session.invalidate();}
 	%>
 	<script>
-	//检测是否有用户注册成功后访问此页面，使得话提示注册成功
+	//检测是否有用户注册成功后访问此页面，是的话提示注册成功
 	<%String msg = request.getParameter("msg");%>
 		<%if ("success".equals(msg)) {%>
 		 alert("<%="注册成功"%>");
 	<%}%>	
-
 	</script>
 	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script>

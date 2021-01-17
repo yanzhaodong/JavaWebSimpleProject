@@ -4,7 +4,7 @@ package utils;
 * 用户注册验证的工具类
 * @author 严照东
 */
-public class ValUtil {
+public class FormatValidationUtil {
 	
 	/*
 	 * 验证邮箱是否规范

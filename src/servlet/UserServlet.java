@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import biz.IUserBIZ;
 import bizimpl.UserBIZImpl;
 
+/**
+* 根据不同指定的action调用不同的业务处理
+* @author 严照东
+*/
 @WebServlet("/UserServlet")
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

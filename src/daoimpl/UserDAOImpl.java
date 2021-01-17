@@ -30,7 +30,7 @@ public class UserDAOImpl implements IUserDAO{
 		this.chance = Integer.valueOf(properties.getProperty("chance")) ;
 	}
 	
-	/*
+	/**
      * @methodsName: usernameRegisterCheck
      * @description: 用户登录的时候，查询是否存在有指定用户名和密码,并已激活的用户
      * @param:  username     用户输入的用户名
@@ -69,7 +69,7 @@ public class UserDAOImpl implements IUserDAO{
 	}
 	
 	
-	/*
+	/**
      * @methodsName: usernameRegisterCheck
      * @description: 注册的时候检查用户的名字，如果用户名已存在且已激活，则不能注册，反之可以注册
      * @param:  username     用户输入的注册用户名
@@ -107,7 +107,7 @@ public class UserDAOImpl implements IUserDAO{
 	}
 
 	
-	/*
+	/**
      * @methodsName: usernameRegister
      * @description: 用户注册成功后创建新用户
      * @param:  username     用户输入的注册用户名

@@ -12,7 +12,7 @@ import enums.UserLoginEnum;
 import enums.UserRegisterEnum;
 import utils.StringUtil;
 import utils.UuidUtil;
-import utils.ValUtil;
+import utils.FormatValidationUtil;
 import utils.CastUtil;
 import utils.MailUtil;
 import utils.Md5;
@@ -24,7 +24,7 @@ import utils.Md5;
 public class UserBIZImpl implements IUserBIZ {
 	IUserDAO userDAO = new UserDAOImpl();
 	IUserStateDAO userStateDAO = new UserStateDAOImpl();
-	/*
+	/**
      * @methodsName: userLogin
      * @description: 用户登录
      * @param:  request      
@@ -38,15 +38,16 @@ public class UserBIZImpl implements IUserBIZ {
 		String syscode = CastUtil.cast(request.getSession().getAttribute("syscode"));
 		int chance = userStateDAO.userGetChance(username);
 		String value = null;
-		if (StringUtil.isEmpty(username)) {                                          //用户名为空
+		
+		if (StringUtil.isEmpty(username)) {                                         
 			value = UserLoginEnum.USER_NAME_IS_NUll.getValue();
-		}else if (StringUtil.isEmpty(password)) {									 //密码为空
+		}else if (StringUtil.isEmpty(password)) {									 
 			value =  UserLoginEnum.USER_PASSWORD_IS_NULL.getValue();
-		}else if (StringUtil.isEmpty(validatecode) || StringUtil.isEmpty(syscode)) { //验证码为空
+		}else if (StringUtil.isEmpty(validatecode) || StringUtil.isEmpty(syscode)) { 
 			value =  UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getValue();
-		}else if (!validatecode.equals(syscode)) {									 //验证码不一致
+		}else if (!validatecode.equals(syscode)) {									 
 			value = UserLoginEnum.USER_VALIDATE_CODE_IS_FAIL.getValue();
-		}else if (chance == 0 & !"admin".equals(username)) {						 //验用户已被禁用
+		}else if (chance == 0 & !"admin".equals(username)) {						
 			value =  UserLoginEnum.USER_FORBIDDEN.getValue();
 		}else{
 			int result = userDAO.userLogin(username,password);
@@ -102,11 +103,11 @@ public class UserBIZImpl implements IUserBIZ {
 		try {
 			encyptedCode = Md5.EncoderByMd5(code);
 			
-			if (!ValUtil.checkUsername(username)) {							//用户名不合法
+			if (!FormatValidationUtil.checkUsername(username)) {							//用户名不合法
 				value = UserRegisterEnum.USER_NAME_INVALID.getValue();
-			}else if (!ValUtil.checkPassword(password)) {					//密码不合法
+			}else if (!FormatValidationUtil.checkPassword(password)) {					//密码不合法
 				value = UserRegisterEnum.USER_PASSWORD_INVALID.getValue();
-			}else if (!ValUtil.checkEmail(email)) {							//邮箱不合法
+			}else if (!FormatValidationUtil.checkEmail(email)) {							//邮箱不合法
 				value = UserRegisterEnum.USER_EMAIL_INVALID.getValue();
 			}else if(!password.equals(againpassword)){						//密码不一致
 				value = UserRegisterEnum.USER_PASSWORDS_DISMATCH.getValue();
@@ -128,7 +129,7 @@ public class UserBIZImpl implements IUserBIZ {
 		return "$"+value;
 	}
 
-	/*
+	/**
      * @methodsName: activateUser
      * @description: 激活用户
      * @param:  request      
@@ -155,7 +156,7 @@ public class UserBIZImpl implements IUserBIZ {
 	}
 	
 	
-	/*
+	/**
      * @methodsName: userRecover
      * @description: 用户接触禁用状态
      * @param:  request      
@@ -176,7 +177,7 @@ public class UserBIZImpl implements IUserBIZ {
 		return "admin.jsp";
 	}
 	
-	/*
+	/**
      * @methodsName: getForbiddenUsers
      * @description: 得到所有被禁用用户     
      * @return: List<User>

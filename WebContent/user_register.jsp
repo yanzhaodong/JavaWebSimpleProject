@@ -19,8 +19,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8">
-	<script type="text/javascript">
-
+	<script>
+	//检测是否有用户注册失败后访问此页面，是的话提示注册失败
+	<%String msg = request.getParameter("msg");%>
+		<%if ("failed".equals(msg)) {%>
+		 alert("<%="注册失败"%>");
+	<%}%>	
 	</script>
 	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script>
@@ -42,6 +46,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    })	    	
 	    }
 	</script>
+	
   </head>
   
    <body >
