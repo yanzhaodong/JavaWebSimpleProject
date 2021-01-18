@@ -33,7 +33,7 @@ public class ImageBIZImpl implements IImageBIZ{
         request.getSession().setAttribute("syscode", text);
         //设置响应头通知浏览器以图片的形式打开
         response.setContentType("image/jpeg");//等同于response.setHeader("Content-Type", "image/jpeg");
-        //9.设置响应头控制浏览器不要缓存
+        //设置响应头控制浏览器不要缓存
         response.setDateHeader("expries", -1);
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");

@@ -17,8 +17,4 @@ public interface IUserDAO {
 	
 	//用户注册
 	int userRegister(String username, String password, String email, String code);
-	
-
-	
-
 }
