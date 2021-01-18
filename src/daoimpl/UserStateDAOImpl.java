@@ -20,7 +20,6 @@ public class UserStateDAOImpl implements IUserStateDAO{
      * @description: 解除用户禁用状态
      * @param:  username     用户输入的注册用户名
      * @return: int          执行变更的行数
-     * @throws:
 	 */
 	public int userRecover(String username){
 		Connection connection = null;
@@ -45,7 +44,6 @@ public class UserStateDAOImpl implements IUserStateDAO{
      * @description: 查询用户剩余机会
      * @param:  username     用户输入的注册用户名
      * @return: int          用户的剩余机会
-     * @throws:
 	 */
 	public int userGetChance(String username){
 		Connection connection = null;
@@ -72,7 +70,6 @@ public class UserStateDAOImpl implements IUserStateDAO{
      * @description: 减少用户剩余连续输错密码机会
      * @param:  username     需要减少机会的用户名
      * @return: int			 执行变更的行数
-     * @throws:
 	 */
 	public int userUpdateChance(String username){
 		Connection connection = null;
@@ -96,7 +93,6 @@ public class UserStateDAOImpl implements IUserStateDAO{
      * @methodsName: userGetChance
      * @description: 得到所有被禁用的用户
      * @return: List<User>   所有被禁用的用户
-     * @throws:
 	 */
 	public List<User> getForbiddenUsers() {
 		List<User> users = new ArrayList<User>();
@@ -153,7 +149,6 @@ public class UserStateDAOImpl implements IUserStateDAO{
      * @description: 激活用户
      * @param:  username      需要被激活用户的用户名
      * @return: int           执行变更的行数
-     * @throws:
 	 */
 	public int activateUser(String username) {
 		Connection connection = null;

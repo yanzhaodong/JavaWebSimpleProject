@@ -36,7 +36,7 @@ public class UserDAOImpl implements IUserDAO{
      * @description: 用户登录的时候，查询是否存在有指定用户名和密码,并已激活的用户
      * @param:  username     用户输入的用户名
      * @param:  password     用户输入的密码
-     * @return: String			 查询后的状态码 -> 0：用户名或者密码不正确; 1：用户未激活; 2：可以成功登录
+     * @return: LoginStateEnum		不同的登录结果
      * @throws:
 	 */
 	public LoginStateEnum userLogin(String username, String password) {
@@ -60,10 +60,9 @@ public class UserDAOImpl implements IUserDAO{
 					result = LoginStateEnum.SUCCEED;
 				}
 			}
-
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}finally {
+		} finally {
 			JDBCUtil.close(resultSet, preparedStatement, connection);
 		}
 		return result;
@@ -143,8 +142,4 @@ public class UserDAOImpl implements IUserDAO{
 		}
 		return executeCount;
 	}
-	
-
-
-	
 }

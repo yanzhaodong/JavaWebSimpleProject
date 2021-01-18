@@ -38,12 +38,12 @@ public class InputCheckUtil {
 	 */
 	public static String registerCheck(String username, String password, String email, String againpassword) {
 		String value = null;
-		if (!FormatValidationUtil.checkUsername(username)) {						
+		if (!FormatValidationUtil.checkEmail(email)) {
+			value = UserRegisterEnum.USER_EMAIL_INVALID.getValue();
+		} else if (!FormatValidationUtil.checkUsername(username)) {
 			value = UserRegisterEnum.USER_NAME_INVALID.getValue();
 		}else if (!FormatValidationUtil.checkPassword(password)) {					
 			value = UserRegisterEnum.USER_PASSWORD_INVALID.getValue();
-		}else if (!FormatValidationUtil.checkEmail(email)) {							
-			value = UserRegisterEnum.USER_EMAIL_INVALID.getValue();
 		}else if(!password.equals(againpassword)){						
 			value = UserRegisterEnum.USER_PASSWORDS_DISMATCH.getValue();
 		}

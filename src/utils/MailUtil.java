@@ -76,8 +76,7 @@ public class MailUtil {
 		    message.setSubject("激活邮件");
 		    String address = "http://" + ip + ":" + port +"/WebProject/UserServlet?action=activate&code=" + code;
 		    String content = "<html><head></head><body><h1>请点击连接激活,如果打不开，请复制下列地址到网址栏</h1><h3>"
-		    		+ "<a href='"+address+ "'>"
-		    		+ address+ "</href></h3></body></html>";
+		    		+ "<a href='"+address+ "'>" + address+ "</href></h3></body></html>";
 		    message.setContent(content, "text/html;charset=UTF-8");
 		    // 邮件发送
 		    Transport transport = session.getTransport();

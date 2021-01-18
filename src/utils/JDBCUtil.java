@@ -27,7 +27,7 @@ public class JDBCUtil {
 		properties.load(in);
 		in.close();
 		
-		String driver = properties.getProperty("driver"); 											// 驱动程序名
+		String driver = properties.getProperty("driver"); 										// 驱动程序名
 		String url = properties.getProperty("url");                                 			// url指向访问的数据库名db
 		String user = properties.getProperty("dbUser"); 										// MySQL配置的用户名
 		String password = properties.getProperty("dbPassword"); 								// MySQL配置里的密码
@@ -48,8 +48,12 @@ public class JDBCUtil {
 			if (resultSet != null) {
 				resultSet.close();
 			}
-			preparedStatement.close();
-			connection.close();
+			if (preparedStatement != null) {
+				preparedStatement.close();
+			}
+			if (connection != null) {
+				connection.close();
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

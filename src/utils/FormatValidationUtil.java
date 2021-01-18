@@ -13,14 +13,12 @@ public class FormatValidationUtil {
      * @return: boolean		     邮箱格式是否规范
 	 */
 	public static boolean checkEmail(String email) {
-		String regex = "[a-zA-Z0-9]{1,}@[a-zA-Z0-9]{1,}[.][c][o][m]";                            //.com结尾的邮箱
-		String regex1 = "[a-zA-Z0-9]{1,}@[a-zA-Z0-9]{1,}[.][c][o][m][a-zA-Z0-9]{0,}[.][c][n]";	  //.cn结尾的邮箱
-
-		if (email.matches(regex) || email.matches(regex1)) {
+		String regex = "\\w+\\.?\\w*\\w@(\\w+\\.)+\\w+";                            //.com结尾的邮箱
+		//String regex1 = "[a-zA-Z0-9]{1,}@[a-zA-Z0-9]{1,}[.][c][o][m][a-zA-Z0-9]{0,}[.][c][n]";	  //.cn结尾的邮箱
+		if (email.matches(regex)) {
 			return true;
-		} else {
-			return false;
-		}
+		} 
+		return false;
 	}
 
 	/**
@@ -31,12 +29,11 @@ public class FormatValidationUtil {
 	 */
 	public static boolean checkUsername(String username) {
 		String regex = "^[a-zA-Z][\\w_]{2,19}$";            
-
 		if (username.matches(regex)) {
 			return true;
-		} else {
-			return false;
-		}
+		} 
+		return false;
+
 	}
 	
 	/**
@@ -48,8 +45,8 @@ public class FormatValidationUtil {
 	public static boolean checkPassword(String password) {
 		if (password.length() < 6 || password.length()>20) {
 			return false;
-		}else {
-			return true;
 		}
+		return true;
+
 	}
 }

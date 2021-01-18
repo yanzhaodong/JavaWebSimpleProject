@@ -41,7 +41,6 @@ public class ImageUtil {
         //String random = drawRandomNum((Graphics2D) g,"nl");//生成数字和字母组合的验证码图片
         //String random = drawRandomNum((Graphics2D) g,"n");//生成纯数字的验证码图片
         //String random = drawRandomNum((Graphics2D) g,"l");//生成纯字母的验证码图片
-        
         drawRandomText((Graphics2D) g, text);//根据客户端传递的createTypeFlag标识生成验证码图片
         return bi;
 	}
