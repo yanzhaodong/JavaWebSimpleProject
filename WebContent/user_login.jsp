@@ -35,15 +35,15 @@
 		        type: 'post',
 		        data: $('#login_form').serialize(), 
 		        success: function (res) {									// Servlet界面不跳转时
-		        	system.out.println(res);
-		        	var jsonValue = JSON.parse(要解析的字段);
+		        	var jsonValue = JSON.parse(res);
 		            var address = jsonValue.ADDRESS;
 		        	if (!address){
-		            	alert(obj.getString("ERRORCODE"));
+		            	alert(jsonValue.ERRORMSG);
 	            		change_image();								        //刷新验证码图片
 	            		document.login_form.validatecode.value="";			//清空验证码文本框			        		
+		        	}else{
+		        		location.href=address;								    //跳转到指定页面
 		        	}
-	            	location.href=obj.getString("ADDRESS");								    //跳转到指定页面		        	
 		        },
 		    })	    	
 	    }

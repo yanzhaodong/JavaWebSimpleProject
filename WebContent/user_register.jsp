@@ -36,10 +36,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		        data: $('#register_form').serialize(), 
 		        success: function (res) {
 		            // Servlet界面不跳转时实行
-		            if (res[0] =="$"){
-		            	alert(res.substring(1,res.length));
+		        	var jsonValue = JSON.parse(res);
+		            var address = jsonValue.ADDRESS;
+		            if (!address){
+		            	alert(jsonValue.ERRORMSG);
 		            }else{
-		            	location.href=res;
+		            	location.href = address;
 		            } 
 		        },
 

@@ -11,6 +11,7 @@ import dao.IUserStateDAO;
 import daoimpl.UserDAOImpl;
 import daoimpl.UserStateDAOImpl;
 import entity.User;
+import enums.LoginStateEnum;
 import enums.UserLoginEnum;
 import enums.UserRegisterEnum;
 import utils.UuidUtil;
@@ -34,35 +35,31 @@ public class UserBIZImpl implements IUserBIZ {
      * @return: String           如果以$开头，则显示为显示的警告信息；否则是页面将要跳转的地址
 	 */
 	public String userLogin(HttpServletRequest request) {
-		final int MISMATCH = 0;
-		final int INACTIVATED = 1;
-		final int SUCCEDD = 2;
-		
+		JSONObject result = new JSONObject();
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String validatecode = request.getParameter("validatecode");
 		String syscode = CastUtil.cast(request.getSession().getAttribute("syscode"));
 		int chance = userStateDAO.userGetChance(username);
-		String value = InputCheckUtil.loginCheck(username, password, validatecode, syscode);;
+		String errorMsg = InputCheckUtil.loginCheck(username, password, validatecode, syscode);;
 	
-		JSONObject result = new JSONObject();
-		
-		if (value == null) {
+		if (errorMsg== null) {
 			if (chance == 0 & !"admin".equals(username)) {						
-				value =  UserLoginEnum.USER_FORBIDDEN.getValue();
-			}else{
-				int state = userDAO.userLogin(username,password);
+				errorMsg =  UserLoginEnum.USER_FORBIDDEN.getValue();
+			} else{
+				LoginStateEnum state = userDAO.userLogin(username,password);
+				//String state = "";
 				//根据返回的状态码判断是否成功登录
 				try{
 					switch (state) {
 						case MISMATCH:           
 							userStateDAO.userUpdateChance(username);
-							result.put("ERRORCODE",UserLoginEnum.USER_NAME_OR_PASSWORD_IS_FAIL.getValue());
+							errorMsg = UserLoginEnum.USER_NAME_OR_PASSWORD_IS_FAIL.getValue();
 							break;
-						case INACTIVATED:					
-							result.put("ERRORCODE",UserLoginEnum.USER_NOT_ACTIVATED.getValue());
+						case INACTIVATED:	
+							errorMsg = UserLoginEnum.USER_NOT_ACTIVATED.getValue();
 							break;
-						case SUCCEDD:				
+						case SUCCEED:				
 							// 登录成功后 把当前登录成功后的用户 存入到SESSION中 
 							request.getSession().setAttribute("username", username);
 							request.getSession().setMaxInactiveInterval(300);
@@ -85,7 +82,9 @@ public class UserBIZImpl implements IUserBIZ {
 				}
 			}
 		}
-		
+		if (errorMsg != null) {
+			result.put("ERRORMSG",errorMsg);
+		}
 		return result.toString();
 	}
 	
@@ -103,28 +102,31 @@ public class UserBIZImpl implements IUserBIZ {
 		
 		String code = UuidUtil.getUuid();                 //生成随机校验码uuid
 		String encyptedCode = "";
-		String value = "";
-		
+		String errorMsg = "";
+		JSONObject result = new JSONObject();
 		
 		try {
 			encyptedCode = Md5.EncoderByMd5(code);
-			value = InputCheckUtil.registerCheck(username,password, email, againpassword);
-			if(value == null) {
+			errorMsg = InputCheckUtil.registerCheck(username,password, email, againpassword);
+			if(errorMsg == null) {
 				User user = userDAO.usernameRegisterCheck(username);
 				if (user != null) {											//注册的用户名已存在且已激活
-					value =  UserRegisterEnum.USER_ALREADY_EXIST.getValue();
+					errorMsg =  UserRegisterEnum.USER_ALREADY_EXIST.getValue();
 				} else {
 					Integer executeCount = userDAO.userRegister(username, password, email, encyptedCode);
 					if(executeCount > 0){
 						MailUtil.sendMail(email, code);
-						return "waiting.jsp";
+						result.put("ADDRESS", "waiting.jsp");
 					}
 				}
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "$"+value;
+		if (errorMsg != null) { 
+			result.put("ERRORMSG", errorMsg);
+		}
+		return result.toString();
 	}
 
 	/**
@@ -143,11 +145,11 @@ public class UserBIZImpl implements IUserBIZ {
 			if (username != null) {
 				userStateDAO.activateUser(username);
 				destination =  "user_login.jsp?msg=success";
-			}else {
+			} else {
 				destination = "user_register.jsp?msg=failed";
 			}
 			
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return destination;

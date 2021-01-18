@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import dao.IUserDAO;
 import entity.User;
+import enums.LoginStateEnum;
 import utils.JDBCUtil;
 import utils.Md5;
 
@@ -38,11 +39,11 @@ public class UserDAOImpl implements IUserDAO{
      * @return: String			 查询后的状态码 -> 0：用户名或者密码不正确; 1：用户未激活; 2：可以成功登录
      * @throws:
 	 */
-	public int userLogin(String username, String password) {
+	public LoginStateEnum userLogin(String username, String password) {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
-		int result = 0;    
+		LoginStateEnum result = LoginStateEnum.MISMATCH;    
 		
 		try {
 			String encryptedPassword = Md5.EncoderByMd5(password);
@@ -54,9 +55,9 @@ public class UserDAOImpl implements IUserDAO{
 			
 			if (resultSet.next()) {
 				if (resultSet.getInt("activated")==0) {
-					result = 1;
+					result = LoginStateEnum.INACTIVATED;
 				} else {
-					result = 2;
+					result = LoginStateEnum.SUCCEED;
 				}
 			}
 

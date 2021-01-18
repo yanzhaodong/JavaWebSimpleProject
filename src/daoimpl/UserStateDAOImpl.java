@@ -51,7 +51,7 @@ public class UserStateDAOImpl implements IUserStateDAO{
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
-		int chance = 0;
+		int chance = -1;
 		try {
 			connection = JDBCUtil.getConnection();
 			preparedStatement = connection.prepareStatement("select chance from users where username=?");
